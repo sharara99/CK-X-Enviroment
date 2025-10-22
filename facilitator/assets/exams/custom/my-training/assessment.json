@@ -1,0 +1,80 @@
+{
+  "questions": [
+    {
+      "id": "1",
+      "namespace": "default",
+      "machineHostname": "ckad9999",
+      "question": "Create a simple pod named `my-pod` using the `nginx:latest` image in the default namespace.\n\nAdd a label `app=my-app` to the pod.\n\nVerify the pod is running.",
+      "concepts": ["pods", "labels", "basic kubernetes"],
+      "verification": [
+        {
+          "id": "1",
+          "description": "Pod exists and is running",
+          "verificationScriptFile": "q1_s1_validate_pod.sh",
+          "expectedOutput": "0",
+          "weightage": 3
+        },
+        {
+          "id": "2",
+          "description": "Pod has correct label",
+          "verificationScriptFile": "q1_s2_validate_label.sh",
+          "expectedOutput": "0",
+          "weightage": 2
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "namespace": "default",
+      "machineHostname": "ckad9999",
+      "question": "Create a ConfigMap named `my-config` with the following data:\n- `database_url`: `mysql://localhost:3306/mydb`\n- `debug`: `true`\n\nCreate a pod named `app-pod` using the `busybox` image that uses this ConfigMap as environment variables.",
+      "concepts": ["configmaps", "environment variables", "pod configuration"],
+      "verification": [
+        {
+          "id": "1",
+          "description": "ConfigMap exists with correct data",
+          "verificationScriptFile": "q2_s1_validate_configmap.sh",
+          "expectedOutput": "0",
+          "weightage": 2
+        },
+        {
+          "id": "2",
+          "description": "Pod uses ConfigMap as environment variables",
+          "verificationScriptFile": "q2_s2_validate_env_vars.sh",
+          "expectedOutput": "0",
+          "weightage": 3
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "namespace": "default",
+      "machineHostname": "ckad9999",
+      "question": "Create a deployment named `web-deployment` with 2 replicas using the `nginx:1.20` image.\n\nExpose the deployment using a ClusterIP service named `web-service` on port 80.\n\nEnsure all pods are running and ready.",
+      "concepts": ["deployments", "services", "replicas"],
+      "verification": [
+        {
+          "id": "1",
+          "description": "Deployment exists with correct replicas",
+          "verificationScriptFile": "q3_s1_validate_deployment.sh",
+          "expectedOutput": "0",
+          "weightage": 2
+        },
+        {
+          "id": "2",
+          "description": "Service exists and targets deployment",
+          "verificationScriptFile": "q3_s2_validate_service.sh",
+          "expectedOutput": "0",
+          "weightage": 2
+        },
+        {
+          "id": "3",
+          "description": "All pods are running and ready",
+          "verificationScriptFile": "q3_s3_validate_pods.sh",
+          "expectedOutput": "0",
+          "weightage": 1
+        }
+      ]
+    }
+  ]
+}

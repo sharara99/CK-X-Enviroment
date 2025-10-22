@@ -1,0 +1,10 @@
+{
+  "lab": "cka-2025-real",
+  "workerNodes": 1,
+  "answers": "assets/exams/custom/cka-2025-real/answers.md",
+  "questions": "assessment.json",
+  "totalMarks": 140,
+  "lowScore": 50,
+  "mediumScore": 100,
+  "highScore": 120
+}

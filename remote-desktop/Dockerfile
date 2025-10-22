@@ -4,8 +4,8 @@ FROM nishanb/ck-x-simulator-vnc-base:v3
 # Switch to root user for installations
 USER 0
 
-# Update and install required dependencies
-RUN apt-get update && apt-get install -y \
+# Update APT sources to HTTPS, then install required dependencies
+RUN sed -i 's|http://|https://|g' /etc/apt/sources.list && apt-get update && apt-get install -y \
     curl \
     wget \
     apt-transport-https \

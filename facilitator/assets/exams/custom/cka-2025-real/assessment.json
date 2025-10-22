@@ -1,0 +1,326 @@
+{
+  "questions": [
+    {
+      "id": "1",
+      "namespace": "default",
+      "machineHostname": "ckad9999",
+      "question": "Setting Up kubeadm and cri-dockerd\n\nTask: Prepare the system for Kubernetes by installing cri-dockerd and configuring system parameters.\n\nSteps:\n1. Install cri-dockerd package\n2. Enable and start cri-docker service\n3. Configure system parameters for Kubernetes\n4. Create persistent sysctl configuration\n5. Apply sysctl parameters without reboot\n\nVerify that cri-docker service is running.",
+      "concepts": ["kubeadm", "cri-dockerd", "system configuration", "sysctl"],
+      "verification": [
+        {
+          "id": "1",
+          "description": "cri-docker service is running",
+          "verificationScriptFile": "q1_s1_validate_cri_docker.sh",
+          "expectedOutput": "0",
+          "weightage": 3
+        },
+        {
+          "id": "2",
+          "description": "System parameters are configured",
+          "verificationScriptFile": "q1_s2_validate_sysctl.sh",
+          "expectedOutput": "0",
+          "weightage": 2
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "namespace": "echo-sound",
+      "machineHostname": "ckad9999",
+      "question": "Ingress for echoserver-service\n\nTask: Create an Ingress named echo in namespace echo-sound for service echoserver-service at http://example.org/echo.\n\nRequirements:\n- Ingress name: echo\n- Namespace: echo-sound\n- Host: example.org\n- Path: /echo\n- Service: echoserver-service\n- Port: 8080\n\nVerify the Ingress is working by testing the endpoint.",
+      "concepts": ["ingress", "networking", "services"],
+      "verification": [
+        {
+          "id": "1",
+          "description": "Ingress exists with correct configuration",
+          "verificationScriptFile": "q2_s1_validate_ingress.sh",
+          "expectedOutput": "0",
+          "weightage": 3
+        },
+        {
+          "id": "2",
+          "description": "Ingress endpoint is accessible",
+          "verificationScriptFile": "q2_s2_validate_endpoint.sh",
+          "expectedOutput": "0",
+          "weightage": 2
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "namespace": "tigera-operator",
+      "machineHostname": "ckad9999",
+      "question": "Installing CNI (Calico)\n\nTask: Install Calico (v3.29.2) as CNI with Network Policy support.\n\nSteps:\n1. Create Calico operator from manifest:\n   https://raw.githubusercontent.com/projectcalico/calico/v3.29.2/manifests/tigera-operator.yaml\n2. Verify operator pods are running:\n   kubectl get pods -n tigera-operator\n3. Ensure Network Policy support is enabled\n\nCalico is ideal for Network Policies. Ensure pods are running.",
+      "concepts": ["CNI", "calico", "network policies", "operators"],
+      "verification": [
+        {
+          "id": "1",
+          "description": "Calico operator pods are running",
+          "verificationScriptFile": "q3_s1_validate_calico.sh",
+          "expectedOutput": "0",
+          "weightage": 3
+        },
+        {
+          "id": "2",
+          "description": "Network Policy support is available",
+          "verificationScriptFile": "q3_s2_validate_network_policy.sh",
+          "expectedOutput": "0",
+          "weightage": 2
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "namespace": "argocd",
+      "machineHostname": "ckad9999",
+      "question": "Argo CD with Helm\n\nTask: Generate a Helm template for Argo CD (v7.7.3) in namespace argocd without CRDs.\n\nSteps:\n1. Add Argo Helm repository\n2. Update Helm repositories\n3. Generate template for Argo CD v7.7.3\n4. Save template to /argo-helm.yaml\n5. Ensure CRDs are not included\n\nVerify the template is generated correctly.",
+      "concepts": ["helm", "argo cd", "templates", "CRDs"],
+      "verification": [
+        {
+          "id": "1",
+          "description": "Helm template file exists",
+          "verificationScriptFile": "q4_s1_validate_helm_template.sh",
+          "expectedOutput": "0",
+          "weightage": 3
+        },
+        {
+          "id": "2",
+          "description": "Template contains Argo CD v7.7.3",
+          "verificationScriptFile": "q4_s2_validate_argo_version.sh",
+          "expectedOutput": "0",
+          "weightage": 2
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "namespace": "priority",
+      "machineHostname": "ckad9999",
+      "question": "PriorityClass for busybox-logger\n\nTask: Create a PriorityClass named high-priority with a value one less than the highest user-defined priority class, and apply it to busybox-logger.\n\nSteps:\n1. Check existing PriorityClasses\n2. Create high-priority class with appropriate value\n3. Apply PriorityClass to busybox-logger deployment\n4. Restart deployment to apply changes\n\nPod evictions are normal with PriorityClass.",
+      "concepts": ["priority classes", "pod scheduling", "deployments"],
+      "verification": [
+        {
+          "id": "1",
+          "description": "PriorityClass exists with correct value",
+          "verificationScriptFile": "q5_s1_validate_priority_class.sh",
+          "expectedOutput": "0",
+          "weightage": 2
+        },
+        {
+          "id": "2",
+          "description": "Deployment uses PriorityClass",
+          "verificationScriptFile": "q5_s2_validate_deployment_priority.sh",
+          "expectedOutput": "0",
+          "weightage": 3
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "namespace": "sp-culator",
+      "machineHostname": "ckad9999",
+      "question": "Service and NodePort for front-end\n\nTask: Modify the front-end Deployment in namespace sp-culator to expose port 80/tcp, and create a Service named front-end-svc.\n\nSteps:\n1. Edit front-end deployment to add container port 80\n2. Create NodePort service named front-end-svc\n3. Configure service to target front-end pods\n4. Set NodePort to 30080\n\nEnsure the Service selector matches Deployment labels.",
+      "concepts": ["services", "nodeport", "deployments", "port configuration"],
+      "verification": [
+        {
+          "id": "1",
+          "description": "Deployment exposes port 80",
+          "verificationScriptFile": "q6_s1_validate_deployment_port.sh",
+          "expectedOutput": "0",
+          "weightage": 2
+        },
+        {
+          "id": "2",
+          "description": "NodePort service exists with correct configuration",
+          "verificationScriptFile": "q6_s2_validate_nodeport_service.sh",
+          "expectedOutput": "0",
+          "weightage": 3
+        }
+      ]
+    },
+    {
+      "id": "7",
+      "namespace": "default",
+      "machineHostname": "ckad9999",
+      "question": "StorageClass (low-latency)\n\nTask: Create a StorageClass named low-latency with provisioner rancher.io/local-path and set it as default.\n\nRequirements:\n- Name: low-latency\n- Provisioner: rancher.io/local-path\n- Set as default StorageClass\n- Volume binding mode: WaitForFirstConsumer\n\nDelete any old default StorageClass first.",
+      "concepts": ["storage classes", "persistent volumes", "default storage"],
+      "verification": [
+        {
+          "id": "1",
+          "description": "StorageClass exists with correct configuration",
+          "verificationScriptFile": "q7_s1_validate_storage_class.sh",
+          "expectedOutput": "0",
+          "weightage": 3
+        },
+        {
+          "id": "2",
+          "description": "StorageClass is set as default",
+          "verificationScriptFile": "q7_s2_validate_default_storage.sh",
+          "expectedOutput": "0",
+          "weightage": 2
+        }
+      ]
+    },
+    {
+      "id": "8",
+      "namespace": "default",
+      "machineHostname": "ckad9999",
+      "question": "Sidecar for synergy-deployment\n\nTask: Add a sidecar to synergy-deployment using busybox:stable.\n\nSteps:\n1. Edit synergy-deployment\n2. Add shared-logs emptyDir volume\n3. Add sidecar container with busybox:stable\n4. Configure sidecar to tail logs from /var/log/synergy-deployment.log\n5. Mount shared-logs volume at /var/log in sidecar\n\nVerify the sidecar is running and can access logs.",
+      "concepts": ["sidecar containers", "volumes", "logging", "multi-container pods"],
+      "verification": [
+        {
+          "id": "1",
+          "description": "Sidecar container exists in deployment",
+          "verificationScriptFile": "q8_s1_validate_sidecar.sh",
+          "expectedOutput": "0",
+          "weightage": 3
+        },
+        {
+          "id": "2",
+          "description": "Sidecar can access shared logs",
+          "verificationScriptFile": "q8_s2_validate_sidecar_logs.sh",
+          "expectedOutput": "0",
+          "weightage": 2
+        }
+      ]
+    },
+    {
+      "id": "9",
+      "namespace": "cert-manager",
+      "machineHostname": "ckad9999",
+      "question": "cert-manager CRDs\n\nTask: Verify cert-manager and extract subject for Certificate CRD.\n\nSteps:\n1. Verify cert-manager pods are running\n2. Extract cert-manager CRDs to ~/resources.yaml\n3. Extract Certificate CRD subject specification to ~/subject.yaml\n\nUse k explain if CRDs confuse you.",
+      "concepts": ["cert-manager", "CRDs", "certificates", "custom resources"],
+      "verification": [
+        {
+          "id": "1",
+          "description": "cert-manager pods are running",
+          "verificationScriptFile": "q9_s1_validate_cert_manager.sh",
+          "expectedOutput": "0",
+          "weightage": 2
+        },
+        {
+          "id": "2",
+          "description": "CRD files are extracted correctly",
+          "verificationScriptFile": "q9_s2_validate_crd_files.sh",
+          "expectedOutput": "0",
+          "weightage": 3
+        }
+      ]
+    },
+    {
+      "id": "10",
+      "namespace": "relative-fawn",
+      "machineHostname": "ckad9999",
+      "question": "WordPress Resource Requests\n\nTask: Adjust WordPress in relative-fawn for 3 replicas with proper resource allocation.\n\nSteps:\n1. Check allocatable resources on node01\n2. Calculate 10% for node, 90% for WordPress\n3. Distribute resources across 3 replicas\n4. Update WordPress deployment with resource requests\n5. Update init container with same resource requests\n\nIf pods fail to schedule, check node capacity.",
+      "concepts": ["resource management", "deployments", "replicas", "resource requests"],
+      "verification": [
+        {
+          "id": "1",
+          "description": "WordPress deployment has 3 replicas",
+          "verificationScriptFile": "q10_s1_validate_replicas.sh",
+          "expectedOutput": "0",
+          "weightage": 2
+        },
+        {
+          "id": "2",
+          "description": "Resource requests are configured correctly",
+          "verificationScriptFile": "q10_s2_validate_resources.sh",
+          "expectedOutput": "0",
+          "weightage": 3
+        }
+      ]
+    },
+    {
+      "id": "11",
+      "namespace": "mariadb",
+      "machineHostname": "ckad9999",
+      "question": "MariaDB and PVC\n\nTask: Recreate MariaDB in mariadb namespace with a PVC.\n\nSteps:\n1. Create PVC named mariadb with 250Mi storage\n2. Edit MariaDB deployment to use PVC\n3. Mount PVC at /var/lib/mysql\n4. Ensure MariaDB pods are running\n\nEnsure the PV is available before creating the PVC.",
+      "concepts": ["persistent volumes", "PVCs", "databases", "storage"],
+      "verification": [
+        {
+          "id": "1",
+          "description": "PVC exists with correct configuration",
+          "verificationScriptFile": "q11_s1_validate_pvc.sh",
+          "expectedOutput": "0",
+          "weightage": 2
+        },
+        {
+          "id": "2",
+          "description": "MariaDB uses PVC for storage",
+          "verificationScriptFile": "q11_s2_validate_mariadb_pvc.sh",
+          "expectedOutput": "0",
+          "weightage": 3
+        }
+      ]
+    },
+    {
+      "id": "12",
+      "namespace": "default",
+      "machineHostname": "ckad9999",
+      "question": "Migration from Ingress to Gateway API\n\nTask: Migrate a web app from Ingress web to Gateway API, maintaining HTTPS, using GatewayClass nginx.\n\nSteps:\n1. Create Gateway web-gateway with HTTPS listener\n2. Create HTTPRoute web-route for web service\n3. Configure TLS termination with web-tls secret\n4. Test HTTPS endpoint\n5. Delete old Ingress web\n\nMaintain HTTPS functionality during migration.",
+      "concepts": ["gateway API", "ingress migration", "HTTPS", "TLS"],
+      "verification": [
+        {
+          "id": "1",
+          "description": "Gateway and HTTPRoute exist",
+          "verificationScriptFile": "q12_s1_validate_gateway.sh",
+          "expectedOutput": "0",
+          "weightage": 3
+        },
+        {
+          "id": "2",
+          "description": "HTTPS endpoint is accessible",
+          "verificationScriptFile": "q12_s2_validate_https.sh",
+          "expectedOutput": "0",
+          "weightage": 2
+        }
+      ]
+    },
+    {
+      "id": "13",
+      "namespace": "autoscale",
+      "machineHostname": "ckad9999",
+      "question": "HorizontalPodAutoscaler (HPA) for apache-server\n\nTask: Create an HPA named apache-server in namespace autoscale, targeting 50% CPU, with 1-4 pods and a 30-second downscale stabilization window.\n\nRequirements:\n- Target: apache-server deployment\n- CPU target: 50% utilization\n- Min replicas: 1\n- Max replicas: 4\n- Downscale stabilization: 30 seconds\n- Use autoscaling/v2 API\n\nVerify the Deployment exists before creating HPA.",
+      "concepts": ["HPA", "autoscaling", "CPU metrics", "stabilization"],
+      "verification": [
+        {
+          "id": "1",
+          "description": "HPA exists with correct configuration",
+          "verificationScriptFile": "q13_s1_validate_hpa.sh",
+          "expectedOutput": "0",
+          "weightage": 3
+        },
+        {
+          "id": "2",
+          "description": "HPA targets correct deployment",
+          "verificationScriptFile": "q13_s2_validate_hpa_target.sh",
+          "expectedOutput": "0",
+          "weightage": 2
+        }
+      ]
+    },
+    {
+      "id": "14",
+      "namespace": "nginx-static",
+      "machineHostname": "ckad9999",
+      "question": "NGINX ConfigMap for TLSv1.3\n\nTask: Update ConfigMap nginx-config in namespace nginx-static to allow only TLSv1.3 connections.\n\nSteps:\n1. Edit nginx-config ConfigMap\n2. Update nginx.conf to use only TLSv1.3\n3. Remove TLSv1.2 from ssl_protocols\n4. Restart nginx-static deployment\n5. Test TLSv1.2 failure\n\nEnsure TLSv1.2 connections fail and TLSv1.3 works.",
+      "concepts": ["configmaps", "TLS", "nginx", "security"],
+      "verification": [
+        {
+          "id": "1",
+          "description": "ConfigMap allows only TLSv1.3",
+          "verificationScriptFile": "q14_s1_validate_tls_config.sh",
+          "expectedOutput": "0",
+          "weightage": 3
+        },
+        {
+          "id": "2",
+          "description": "TLSv1.2 connections fail",
+          "verificationScriptFile": "q14_s2_validate_tls_failure.sh",
+          "expectedOutput": "0",
+          "weightage": 2
+        }
+      ]
+    }
+  ]
+}

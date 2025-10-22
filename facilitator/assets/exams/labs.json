@@ -69,6 +69,16 @@
         "warmUpTimeInSeconds": 260,
         "difficulty": "Medium",
         "examDurationInMinutes": 90
+      },
+      {
+        "id": "cka-2025-real",
+        "assetPath": "assets/exams/custom/cka-2025-real",
+        "name": "CKA 2025 Real Exam Questions",
+        "category": "CKA",
+        "description": "Real CKA 2025 exam questions covering kubeadm setup, CNI installation, Ingress, Gateway API, HPA, StorageClasses, PriorityClasses, and advanced Kubernetes administration tasks.",
+        "warmUpTimeInSeconds": 360,
+        "difficulty": "Hard",
+        "examDurationInMinutes": 120
       }
     ]
   } 

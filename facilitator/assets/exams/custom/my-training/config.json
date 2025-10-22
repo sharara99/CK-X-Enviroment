@@ -1,0 +1,10 @@
+{
+  "lab": "custom-training-001",
+  "workerNodes": 1,
+  "answers": "assets/exams/custom/my-training/answers.md",
+  "questions": "assessment.json",
+  "totalMarks": 30,
+  "lowScore": 10,
+  "mediumScore": 20,
+  "highScore": 25
+}
