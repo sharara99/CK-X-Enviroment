@@ -481,4 +481,715 @@ ul.requirements li {
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(-5px); }
     to { opacity: 1; transform: translateY(0); }
+}
+
+/* Simple Click-to-Copy Elements Styling */
+.clickable-url,
+.clickable-command,
+.clickable-code,
+.clickable-ingress,
+.clickable-namespace,
+.clickable-host,
+.clickable-path,
+.clickable-service,
+.clickable-port,
+.clickable-pod,
+.clickable-deployment,
+.clickable-configmap,
+.clickable-secret,
+.clickable-priorityclass,
+.clickable-storageclass,
+.clickable-gateway,
+.clickable-httproute,
+.clickable-pvc,
+.clickable-hpa,
+.clickable-target,
+.clickable-minreplicas,
+.clickable-maxreplicas,
+.clickable-cputarget,
+.clickable-storage,
+.clickable-version,
+.clickable-filepath,
+.clickable-image,
+.clickable-nodeport,
+.clickable-provisioner,
+.clickable-gatewayclass,
+.clickable-named,
+.clickable-deployment-name,
+.clickable-namespace-name,
+.clickable-configmap-name,
+.clickable-pvc-name,
+.clickable-gateway-name,
+.clickable-httproute-name,
+.clickable-secret-name,
+.clickable-ingress-name,
+.clickable-priorityclass-name,
+.clickable-storageclass-name,
+.clickable-hpa-name,
+.clickable-replicas,
+.clickable-percentage,
+.clickable-resource,
+.clickable-node,
+.clickable-volume,
+.clickable-container,
+.clickable-listener,
+.clickable-endpoint,
+.clickable-failure,
+.clickable-deployment-specific,
+.clickable-namespace-specific,
+.clickable-pods-specific,
+.clickable-nodeport-specific,
+.clickable-name-specific,
+.clickable-binding-mode,
+.clickable-edit-target,
+.clickable-namespace-standalone,
+.clickable-mount-path,
+.clickable-gateway-name-specific,
+.clickable-namespace-autoscale {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 3px;
+    padding: 2px 4px;
+    margin: 0 1px;
+}
+
+/* URL styling */
+.clickable-url {
+    color: #0066cc;
+    background-color: rgba(0, 102, 204, 0.1);
+    border-bottom: 1px dashed #0066cc;
+    text-decoration: none;
+}
+
+.clickable-url:hover {
+    background-color: rgba(0, 102, 204, 0.2);
+    border-bottom: 1px solid #0066cc;
+}
+
+/* Command styling */
+.clickable-command {
+    color: #28a745;
+    background-color: rgba(40, 167, 69, 0.1);
+    border: 1px solid rgba(40, 167, 69, 0.3);
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    font-size: 0.9em;
+}
+
+.clickable-command:hover {
+    background-color: rgba(40, 167, 69, 0.2);
+    border-color: #28a745;
+}
+
+/* Code styling */
+.clickable-code {
+    color: #495057;
+    background-color: rgba(73, 80, 87, 0.1);
+    border: 1px solid rgba(73, 80, 87, 0.3);
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    font-size: 0.9em;
+}
+
+.clickable-code:hover {
+    background-color: rgba(73, 80, 87, 0.2);
+    border-color: #495057;
+}
+
+/* Add copy icon on hover */
+.clickable-url:hover::after,
+.clickable-command:hover::after,
+.clickable-code:hover::after {
+    content: " 📋";
+    font-size: 0.8em;
+    opacity: 0.7;
+}
+
+/* Ingress styling */
+.clickable-ingress {
+    color: #6f42c1;
+    background-color: rgba(111, 66, 193, 0.1);
+    border: 1px solid rgba(111, 66, 193, 0.3);
+    font-weight: 500;
+}
+
+.clickable-ingress:hover {
+    background-color: rgba(111, 66, 193, 0.2);
+    border-color: #6f42c1;
+}
+
+/* Namespace styling */
+.clickable-namespace {
+    color: #fd7e14;
+    background-color: rgba(253, 126, 20, 0.1);
+    border: 1px solid rgba(253, 126, 20, 0.3);
+    font-weight: 500;
+}
+
+.clickable-namespace:hover {
+    background-color: rgba(253, 126, 20, 0.2);
+    border-color: #fd7e14;
+}
+
+/* Host styling */
+.clickable-host {
+    color: #20c997;
+    background-color: rgba(32, 201, 151, 0.1);
+    border: 1px solid rgba(32, 201, 151, 0.3);
+    font-weight: 500;
+}
+
+.clickable-host:hover {
+    background-color: rgba(32, 201, 151, 0.2);
+    border-color: #20c997;
+}
+
+/* Path styling */
+.clickable-path {
+    color: #17a2b8;
+    background-color: rgba(23, 162, 184, 0.1);
+    border: 1px solid rgba(23, 162, 184, 0.3);
+    font-weight: 500;
+}
+
+.clickable-path:hover {
+    background-color: rgba(23, 162, 184, 0.2);
+    border-color: #17a2b8;
+}
+
+/* Service styling */
+.clickable-service {
+    color: #dc3545;
+    background-color: rgba(220, 53, 69, 0.1);
+    border: 1px solid rgba(220, 53, 69, 0.3);
+    font-weight: 500;
+}
+
+.clickable-service:hover {
+    background-color: rgba(220, 53, 69, 0.2);
+    border-color: #dc3545;
+}
+
+/* Port styling */
+.clickable-port {
+    color: #6c757d;
+    background-color: rgba(108, 117, 125, 0.1);
+    border: 1px solid rgba(108, 117, 125, 0.3);
+    font-weight: 500;
+}
+
+.clickable-port:hover {
+    background-color: rgba(108, 117, 125, 0.2);
+    border-color: #6c757d;
+}
+
+/* Pod styling */
+.clickable-pod {
+    color: #ffc107;
+    background-color: rgba(255, 193, 7, 0.1);
+    border: 1px solid rgba(255, 193, 7, 0.3);
+    font-weight: 500;
+}
+
+.clickable-pod:hover {
+    background-color: rgba(255, 193, 7, 0.2);
+    border-color: #ffc107;
+}
+
+/* Deployment styling */
+.clickable-deployment {
+    color: #e83e8c;
+    background-color: rgba(232, 62, 140, 0.1);
+    border: 1px solid rgba(232, 62, 140, 0.3);
+    font-weight: 500;
+}
+
+.clickable-deployment:hover {
+    background-color: rgba(232, 62, 140, 0.2);
+    border-color: #e83e8c;
+}
+
+/* ConfigMap styling */
+.clickable-configmap {
+    color: #28a745;
+    background-color: rgba(40, 167, 69, 0.1);
+    border: 1px solid rgba(40, 167, 69, 0.3);
+    font-weight: 500;
+}
+
+.clickable-configmap:hover {
+    background-color: rgba(40, 167, 69, 0.2);
+    border-color: #28a745;
+}
+
+/* Secret styling */
+.clickable-secret {
+    color: #343a40;
+    background-color: rgba(52, 58, 64, 0.1);
+    border: 1px solid rgba(52, 58, 64, 0.3);
+    font-weight: 500;
+}
+
+.clickable-secret:hover {
+    background-color: rgba(52, 58, 64, 0.2);
+    border-color: #343a40;
+}
+
+/* Add copy icon on hover for all clickable elements */
+.clickable-url:hover::after,
+.clickable-command:hover::after,
+.clickable-code:hover::after,
+.clickable-ingress:hover::after,
+.clickable-namespace:hover::after,
+.clickable-host:hover::after,
+.clickable-path:hover::after,
+.clickable-service:hover::after,
+.clickable-port:hover::after,
+.clickable-pod:hover::after,
+.clickable-deployment:hover::after,
+.clickable-configmap:hover::after,
+.clickable-secret:hover::after,
+.clickable-priorityclass:hover::after,
+.clickable-storageclass:hover::after,
+.clickable-gateway:hover::after,
+.clickable-httproute:hover::after,
+.clickable-pvc:hover::after,
+.clickable-hpa:hover::after,
+.clickable-target:hover::after,
+.clickable-minreplicas:hover::after,
+.clickable-maxreplicas:hover::after,
+.clickable-cputarget:hover::after,
+.clickable-storage:hover::after,
+.clickable-version:hover::after,
+.clickable-filepath:hover::after,
+.clickable-image:hover::after,
+.clickable-nodeport:hover::after,
+.clickable-provisioner:hover::after,
+.clickable-gatewayclass:hover::after {
+    content: " 📋";
+    font-size: 0.8em;
+    opacity: 0.7;
+}
+
+/* PriorityClass styling */
+.clickable-priorityclass {
+    color: #6f42c1;
+    background-color: rgba(111, 66, 193, 0.1);
+    border: 1px solid rgba(111, 66, 193, 0.3);
+    font-weight: 500;
+}
+
+.clickable-priorityclass:hover {
+    background-color: rgba(111, 66, 193, 0.2);
+    border-color: #6f42c1;
+}
+
+/* StorageClass styling */
+.clickable-storageclass {
+    color: #fd7e14;
+    background-color: rgba(253, 126, 20, 0.1);
+    border: 1px solid rgba(253, 126, 20, 0.3);
+    font-weight: 500;
+}
+
+.clickable-storageclass:hover {
+    background-color: rgba(253, 126, 20, 0.2);
+    border-color: #fd7e14;
+}
+
+/* Gateway styling */
+.clickable-gateway {
+    color: #20c997;
+    background-color: rgba(32, 201, 151, 0.1);
+    border: 1px solid rgba(32, 201, 151, 0.3);
+    font-weight: 500;
+}
+
+.clickable-gateway:hover {
+    background-color: rgba(32, 201, 151, 0.2);
+    border-color: #20c997;
+}
+
+/* HTTPRoute styling */
+.clickable-httproute {
+    color: #17a2b8;
+    background-color: rgba(23, 162, 184, 0.1);
+    border: 1px solid rgba(23, 162, 184, 0.3);
+    font-weight: 500;
+}
+
+.clickable-httproute:hover {
+    background-color: rgba(23, 162, 184, 0.2);
+    border-color: #17a2b8;
+}
+
+/* PVC styling */
+.clickable-pvc {
+    color: #dc3545;
+    background-color: rgba(220, 53, 69, 0.1);
+    border: 1px solid rgba(220, 53, 69, 0.3);
+    font-weight: 500;
+}
+
+.clickable-pvc:hover {
+    background-color: rgba(220, 53, 69, 0.2);
+    border-color: #dc3545;
+}
+
+/* HPA styling */
+.clickable-hpa {
+    color: #6c757d;
+    background-color: rgba(108, 117, 125, 0.1);
+    border: 1px solid rgba(108, 117, 125, 0.3);
+    font-weight: 500;
+}
+
+.clickable-hpa:hover {
+    background-color: rgba(108, 117, 125, 0.2);
+    border-color: #6c757d;
+}
+
+/* Target styling */
+.clickable-target {
+    color: #ffc107;
+    background-color: rgba(255, 193, 7, 0.1);
+    border: 1px solid rgba(255, 193, 7, 0.3);
+    font-weight: 500;
+}
+
+.clickable-target:hover {
+    background-color: rgba(255, 193, 7, 0.2);
+    border-color: #ffc107;
+}
+
+/* Min/Max replicas styling */
+.clickable-minreplicas,
+.clickable-maxreplicas {
+    color: #e83e8c;
+    background-color: rgba(232, 62, 140, 0.1);
+    border: 1px solid rgba(232, 62, 140, 0.3);
+    font-weight: 500;
+}
+
+.clickable-minreplicas:hover,
+.clickable-maxreplicas:hover {
+    background-color: rgba(232, 62, 140, 0.2);
+    border-color: #e83e8c;
+}
+
+/* CPU target styling */
+.clickable-cputarget {
+    color: #28a745;
+    background-color: rgba(40, 167, 69, 0.1);
+    border: 1px solid rgba(40, 167, 69, 0.3);
+    font-weight: 500;
+}
+
+.clickable-cputarget:hover {
+    background-color: rgba(40, 167, 69, 0.2);
+    border-color: #28a745;
+}
+
+/* Storage styling */
+.clickable-storage {
+    color: #343a40;
+    background-color: rgba(52, 58, 64, 0.1);
+    border: 1px solid rgba(52, 58, 64, 0.3);
+    font-weight: 500;
+}
+
+.clickable-storage:hover {
+    background-color: rgba(52, 58, 64, 0.2);
+    border-color: #343a40;
+}
+
+/* Version styling */
+.clickable-version {
+    color: #6f42c1;
+    background-color: rgba(111, 66, 193, 0.1);
+    border: 1px solid rgba(111, 66, 193, 0.3);
+    font-weight: 500;
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+}
+
+.clickable-version:hover {
+    background-color: rgba(111, 66, 193, 0.2);
+    border-color: #6f42c1;
+}
+
+/* File path styling */
+.clickable-filepath {
+    color: #fd7e14;
+    background-color: rgba(253, 126, 20, 0.1);
+    border: 1px solid rgba(253, 126, 20, 0.3);
+    font-weight: 500;
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+}
+
+.clickable-filepath:hover {
+    background-color: rgba(253, 126, 20, 0.2);
+    border-color: #fd7e14;
+}
+
+/* Container image styling */
+.clickable-image {
+    color: #20c997;
+    background-color: rgba(32, 201, 151, 0.1);
+    border: 1px solid rgba(32, 201, 151, 0.3);
+    font-weight: 500;
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+}
+
+.clickable-image:hover {
+    background-color: rgba(32, 201, 151, 0.2);
+    border-color: #20c997;
+}
+
+/* NodePort styling */
+.clickable-nodeport {
+    color: #17a2b8;
+    background-color: rgba(23, 162, 184, 0.1);
+    border: 1px solid rgba(23, 162, 184, 0.3);
+    font-weight: 500;
+}
+
+.clickable-nodeport:hover {
+    background-color: rgba(23, 162, 184, 0.2);
+    border-color: #17a2b8;
+}
+
+/* Provisioner styling */
+.clickable-provisioner {
+    color: #dc3545;
+    background-color: rgba(220, 53, 69, 0.1);
+    border: 1px solid rgba(220, 53, 69, 0.3);
+    font-weight: 500;
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+}
+
+.clickable-provisioner:hover {
+    background-color: rgba(220, 53, 69, 0.2);
+    border-color: #dc3545;
+}
+
+/* GatewayClass styling */
+.clickable-gatewayclass {
+    color: #6c757d;
+    background-color: rgba(108, 117, 125, 0.1);
+    border: 1px solid rgba(108, 117, 125, 0.3);
+    font-weight: 500;
+}
+
+.clickable-gatewayclass:hover {
+    background-color: rgba(108, 117, 125, 0.2);
+    border-color: #6c757d;
+}
+
+/* Optimized specific naming patterns styling */
+.clickable-named,
+.clickable-deployment-name,
+.clickable-namespace-name,
+.clickable-configmap-name,
+.clickable-pvc-name,
+.clickable-gateway-name,
+.clickable-httproute-name,
+.clickable-secret-name,
+.clickable-ingress-name,
+.clickable-priorityclass-name,
+.clickable-storageclass-name,
+.clickable-hpa-name {
+    color: #6f42c1;
+    background-color: rgba(111, 66, 193, 0.1);
+    border: 1px solid rgba(111, 66, 193, 0.3);
+    font-weight: 500;
+}
+
+.clickable-named:hover,
+.clickable-deployment-name:hover,
+.clickable-namespace-name:hover,
+.clickable-configmap-name:hover,
+.clickable-pvc-name:hover,
+.clickable-gateway-name:hover,
+.clickable-httproute-name:hover,
+.clickable-secret-name:hover,
+.clickable-ingress-name:hover,
+.clickable-priorityclass-name:hover,
+.clickable-storageclass-name:hover,
+.clickable-hpa-name:hover {
+    background-color: rgba(111, 66, 193, 0.2);
+    border-color: #6f42c1;
+}
+
+/* Replicas styling */
+.clickable-replicas {
+    color: #e83e8c;
+    background-color: rgba(232, 62, 140, 0.1);
+    border: 1px solid rgba(232, 62, 140, 0.3);
+    font-weight: 500;
+}
+
+.clickable-replicas:hover {
+    background-color: rgba(232, 62, 140, 0.2);
+    border-color: #e83e8c;
+}
+
+/* Percentage styling */
+.clickable-percentage {
+    color: #28a745;
+    background-color: rgba(40, 167, 69, 0.1);
+    border: 1px solid rgba(40, 167, 69, 0.3);
+    font-weight: 500;
+}
+
+.clickable-percentage:hover {
+    background-color: rgba(40, 167, 69, 0.2);
+    border-color: #28a745;
+}
+
+/* Resource styling */
+.clickable-resource {
+    color: #fd7e14;
+    background-color: rgba(253, 126, 20, 0.1);
+    border: 1px solid rgba(253, 126, 20, 0.3);
+    font-weight: 500;
+}
+
+.clickable-resource:hover {
+    background-color: rgba(253, 126, 20, 0.2);
+    border-color: #fd7e14;
+}
+
+/* Node styling */
+.clickable-node {
+    color: #20c997;
+    background-color: rgba(32, 201, 151, 0.1);
+    border: 1px solid rgba(32, 201, 151, 0.3);
+    font-weight: 500;
+}
+
+.clickable-node:hover {
+    background-color: rgba(32, 201, 151, 0.2);
+    border-color: #20c997;
+}
+
+/* Volume styling */
+.clickable-volume {
+    color: #17a2b8;
+    background-color: rgba(23, 162, 184, 0.1);
+    border: 1px solid rgba(23, 162, 184, 0.3);
+    font-weight: 500;
+}
+
+.clickable-volume:hover {
+    background-color: rgba(23, 162, 184, 0.2);
+    border-color: #17a2b8;
+}
+
+/* Container styling */
+.clickable-container {
+    color: #dc3545;
+    background-color: rgba(220, 53, 69, 0.1);
+    border: 1px solid rgba(220, 53, 69, 0.3);
+    font-weight: 500;
+}
+
+.clickable-container:hover {
+    background-color: rgba(220, 53, 69, 0.2);
+    border-color: #dc3545;
+}
+
+/* Listener styling */
+.clickable-listener {
+    color: #ffc107;
+    background-color: rgba(255, 193, 7, 0.1);
+    border: 1px solid rgba(255, 193, 7, 0.3);
+    font-weight: 500;
+}
+
+.clickable-listener:hover {
+    background-color: rgba(255, 193, 7, 0.2);
+    border-color: #ffc107;
+}
+
+/* Endpoint styling */
+.clickable-endpoint {
+    color: #6c757d;
+    background-color: rgba(108, 117, 125, 0.1);
+    border: 1px solid rgba(108, 117, 125, 0.3);
+    font-weight: 500;
+}
+
+.clickable-endpoint:hover {
+    background-color: rgba(108, 117, 125, 0.2);
+    border-color: #6c757d;
+}
+
+/* Failure styling */
+.clickable-failure {
+    color: #dc3545;
+    background-color: rgba(220, 53, 69, 0.1);
+    border: 1px solid rgba(220, 53, 69, 0.3);
+    font-weight: 500;
+}
+
+.clickable-failure:hover {
+    background-color: rgba(220, 53, 69, 0.2);
+    border-color: #dc3545;
+}
+
+/* Additional specific patterns styling */
+.clickable-deployment-specific,
+.clickable-namespace-specific,
+.clickable-pods-specific,
+.clickable-nodeport-specific,
+.clickable-name-specific,
+.clickable-binding-mode,
+.clickable-edit-target,
+.clickable-namespace-standalone,
+.clickable-mount-path,
+.clickable-gateway-name-specific,
+.clickable-namespace-autoscale {
+    color: #6f42c1;
+    background-color: rgba(111, 66, 193, 0.1);
+    border: 1px solid rgba(111, 66, 193, 0.3);
+    font-weight: 500;
+}
+
+.clickable-deployment-specific:hover,
+.clickable-namespace-specific:hover,
+.clickable-pods-specific:hover,
+.clickable-nodeport-specific:hover,
+.clickable-name-specific:hover,
+.clickable-binding-mode:hover,
+.clickable-edit-target:hover,
+.clickable-namespace-standalone:hover,
+.clickable-mount-path:hover,
+.clickable-gateway-name-specific:hover,
+.clickable-namespace-autoscale:hover {
+    background-color: rgba(111, 66, 193, 0.2);
+    border-color: #6f42c1;
+}
+
+/* Special styling for mount paths */
+.clickable-mount-path {
+    color: #fd7e14;
+    background-color: rgba(253, 126, 20, 0.1);
+    border: 1px solid rgba(253, 126, 20, 0.3);
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+}
+
+.clickable-mount-path:hover {
+    background-color: rgba(253, 126, 20, 0.2);
+    border-color: #fd7e14;
+}
+
+/* Special styling for binding modes */
+.clickable-binding-mode {
+    color: #17a2b8;
+    background-color: rgba(23, 162, 184, 0.1);
+    border: 1px solid rgba(23, 162, 184, 0.3);
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+}
+
+.clickable-binding-mode:hover {
+    background-color: rgba(23, 162, 184, 0.2);
+    border-color: #17a2b8;
 } 

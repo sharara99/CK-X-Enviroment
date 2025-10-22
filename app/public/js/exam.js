@@ -642,6 +642,7 @@ document.addEventListener('DOMContentLoaded', function() {
         setupUIEventListeners();
         
         // Setup clipboard copy for inline code elements
+        ClipboardService.setupClickToCopy();
         ClipboardService.setupInlineCodeCopy();
         
         // If in completed exam mode, ensure the question pane is visible
