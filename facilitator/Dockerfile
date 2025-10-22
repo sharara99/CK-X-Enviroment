@@ -11,7 +11,7 @@ RUN apk add --no-cache openssh-client
 COPY package*.json ./
 
 # Install dependencies
-RUN npm ci --only=production
+RUN npm install --only=production
 
 # Bundle app source
 COPY . .

@@ -117,8 +117,13 @@ print_info "Starting deployment process for CKAD Simulator with Docker Compose"
 
 print_header "DOCKER IMAGE BUILDING"
 
-print_progress "Building Docker images via Docker Compose..."
-COMPOSE_BAKE=true docker compose build 
+print_progress "Building Docker images via Docker Compose with parallel builds..."
+# Enable BuildKit for faster builds
+export DOCKER_BUILDKIT=1
+export COMPOSE_DOCKER_CLI_BUILD=1
+
+# Build with parallel processing and cache optimization
+docker compose build --parallel --build-arg BUILDKIT_INLINE_CACHE=1
 print_success "All Docker images built successfully"
 
 # ===============================================================================

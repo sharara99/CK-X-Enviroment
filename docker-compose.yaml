@@ -1,9 +1,19 @@
+version: '3.8'
+
+# Enable BuildKit for faster builds
+x-buildkit: &buildkit
+  BUILDKIT_INLINE_CACHE: 1
+
 services:
   # VNC Server (Ubuntu)
   remote-desktop:
     image: nishanb/ck-x-simulator-remote-desktop:latest
     build:
       context: ./remote-desktop
+      args:
+        BUILDKIT_INLINE_CACHE: 1
+      cache_from:
+        - nishanb/ck-x-simulator-remote-desktop:latest
     hostname: terminal
     expose:
       - "5901" # VNC port (internal only)
@@ -21,11 +31,11 @@ services:
     deploy:
       resources:
         limits:
+          cpus: "2"
+          memory: 2G
+        reservations:
           cpus: "1"
           memory: 1G
-        reservations:
-          cpus: "0.5"
-          memory: 512M
     networks:
       - ckx-network
 
@@ -34,6 +44,10 @@ services:
     image: nishanb/ck-x-simulator-webapp:latest
     build:
       context: ./app
+      args:
+        BUILDKIT_INLINE_CACHE: 1
+      cache_from:
+        - nishanb/ck-x-simulator-webapp:latest
     expose:
       - "3000" # Only exposed to internal network
     environment:
@@ -47,11 +61,11 @@ services:
     deploy:
       resources:
         limits:
+          cpus: "1"
+          memory: 1G
+        reservations:
           cpus: "0.5"
           memory: 512M
-        reservations:
-          cpus: "0.2"
-          memory: 256M
     healthcheck:
       test: ["CMD", "wget", "-q", "-O", "-", "http://localhost:3000/"]
       interval: 10s
@@ -145,6 +159,10 @@ services:
     image: nishanb/ck-x-simulator-cluster:latest
     build:
       context: ./kind-cluster
+      args:
+        BUILDKIT_INLINE_CACHE: 1
+      cache_from:
+        - nishanb/ck-x-simulator-cluster:latest
     container_name: kind-cluster
     hostname: k8s-api-server
     privileged: true # Required for running containers inside KIND
@@ -156,11 +174,11 @@ services:
     deploy:
       resources:
         limits:
+          cpus: "4"
+          memory: 8G
+        reservations:
           cpus: "2"
           memory: 4G
-        reservations:
-          cpus: "1"
-          memory: 2G
     networks:
       - ckx-network
     healthcheck:
@@ -200,6 +218,10 @@ services:
     build:
       context: ./facilitator
       dockerfile: Dockerfile
+      args:
+        BUILDKIT_INLINE_CACHE: 1
+      cache_from:
+        - nishanb/ck-x-simulator-facilitator:latest
     hostname: facilitator
     expose:
       - "3000"
@@ -222,11 +244,11 @@ services:
     deploy:
       resources:
         limits:
+          cpus: "1"
+          memory: 1G
+        reservations:
           cpus: "0.5"
           memory: 512M
-        reservations:
-          cpus: "0.2"
-          memory: 256M
     healthcheck:
       test: ["CMD", "wget", "-q", "-O", "-", "http://localhost:3000"]
       interval: 10s
