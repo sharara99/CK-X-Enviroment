@@ -62,13 +62,13 @@ metadata:
   name: cluster
 servers: 1
 agents: 1
-ports:
-  - port: "6443:6443"
-    nodeFilters:
-      - loadbalancer
-kubeAPI:
-  host: "127.0.0.1"
-  hostPort: "6443"
+       ports:
+         - port: "0:6443"
+           nodeFilters:
+             - loadbalancer
+       kubeAPI:
+         host: "0.0.0.0"
+         hostPort: "0"
 options:
   k3s:
     extraArgs:

@@ -63,12 +63,12 @@ metadata:
 servers: 1
 agents: $NUM_WORKERS
 ports:
-  - port: "$API_PORT:6443"
+  - port: "0:6443"
     nodeFilters:
       - loadbalancer
 kubeAPI:
-  host: "127.0.0.1"
-  hostPort: "$API_PORT"
+  host: "0.0.0.0"
+  hostPort: "0"
 options:
   k3s:
     extraArgs:
@@ -100,11 +100,15 @@ k3d cluster create --config /tmp/k3d-config.yaml
 echo "$(date '+%Y-%m-%d %H:%M:%S') | Verifying cluster status..."
 CLUSTER_CHECK_COUNT=0
 
-# Wait for k3d cluster to be ready
+# Wait for k3d cluster to be ready (reduced wait time)
 while ! k3d cluster list | grep -q "$CLUSTER_NAME"; do
     CLUSTER_CHECK_COUNT=$((CLUSTER_CHECK_COUNT+1))
     echo "$(date '+%Y-%m-%d %H:%M:%S') | [WAITING] K3d cluster '$CLUSTER_NAME' not ready yet... (attempt $CLUSTER_CHECK_COUNT)"
-    sleep 5
+    sleep 2
+    if [ $CLUSTER_CHECK_COUNT -gt 10 ]; then
+        echo "$(date '+%Y-%m-%d %H:%M:%S') | [ERROR] Cluster creation timeout after 20 seconds"
+        exit 1
+    fi
 done
 
 echo "$(date '+%Y-%m-%d %H:%M:%S') | ✅ K3d cluster '$CLUSTER_NAME' is up and running!"
@@ -117,7 +121,14 @@ echo "$(date '+%Y-%m-%d %H:%M:%S') | Docker and KIND environment is ready for us
 
 # Save kubeconfig and set API server address
 cp /home/candidate/.kube/config /home/candidate/.kube/kubeconfig
-sed -i 's|server: https://127\.0\.0\.1:\([0-9]*\)|server: https://k8s-api-server:\1|' /home/candidate/.kube/kubeconfig
+# Extract the actual port from k3d kubeconfig and use it
+ACTUAL_PORT=$(grep -o 'server: https://127\.0\.0\.1:[0-9]*' /home/candidate/.kube/config | grep -o '[0-9]*$')
+if [ -n "$ACTUAL_PORT" ]; then
+    sed -i "s|server: https://127\.0\.0\.1:$ACTUAL_PORT|server: https://k8s-api-server:$ACTUAL_PORT|" /home/candidate/.kube/kubeconfig
+    echo "$(date '+%Y-%m-%d %H:%M:%S') | ✅ Kubeconfig updated to use k8s-api-server:$ACTUAL_PORT"
+else
+    echo "$(date '+%Y-%m-%d %H:%M:%S') | ⚠️  Could not extract port from kubeconfig, using default"
+fi
 
 export KUBECONFIG=/home/candidate/.kube/kubeconfig
 

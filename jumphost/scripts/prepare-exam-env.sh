@@ -61,15 +61,30 @@ export KUBECONFIG=/home/candidate/.kube/kubeconfig
 
 sleep 2
 
-#wait till api-server is ready
+#wait till api-server is ready (with timeout)
+API_CHECK_COUNT=0
 while ! kubectl get nodes > /dev/null 2>&1; do
+  API_CHECK_COUNT=$((API_CHECK_COUNT+1))
+  if [ $API_CHECK_COUNT -gt 30 ]; then
+    log "ERROR: API server not ready after 60 seconds"
+    exit 1
+  fi
   sleep 2
 done
 
 echo "API server is ready"
 
-#Run setup scripts
-for script in /tmp/exam-assets/scripts/setup/q*_setup.sh; do $script; done
+#Run setup scripts in parallel for faster execution
+log "Running setup scripts in parallel..."
+for script in /tmp/exam-assets/scripts/setup/q*_setup.sh; do 
+  if [ -f "$script" ]; then
+    bash "$script" &
+  fi
+done
+
+# Wait for all background jobs to complete
+wait
+log "All setup scripts completed"
 
 log "Exam environment preparation completed successfully"
 exit 0 

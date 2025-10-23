@@ -1,5 +1,3 @@
-version: '3.8'
-
 # Enable BuildKit for faster builds
 x-buildkit: &buildkit
   BUILDKIT_INLINE_CACHE: 1
@@ -119,6 +117,7 @@ services:
       resources:
         limits:
           cpus: "1"
+          memory: 1G
         reservations:
           cpus: "0.5"
           memory: 512M
@@ -166,12 +165,16 @@ services:
     container_name: kind-cluster
     hostname: k8s-api-server
     privileged: true # Required for running containers inside KIND
-    environment:
-      - API_PORT=6443
+    environment: []
     expose:
       - "22"
     volumes:
       - kube-config:/home/candidate/.kube # Shared volume for Kubernetes config
+    # DNS resolution for image pulling
+    dns:
+      - "8.8.8.8"
+      - "8.8.4.4"
+      - "1.1.1.1"
     deploy:
       resources:
         limits:
