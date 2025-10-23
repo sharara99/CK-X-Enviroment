@@ -74,8 +74,14 @@ done
 
 echo "API server is ready"
 
-#Run setup scripts in parallel for faster execution
-log "Running setup scripts in parallel..."
+#Run comprehensive setup first
+log "Running comprehensive CKA 2025 setup..."
+if [ -f "/tmp/exam-assets/scripts/setup/comprehensive_setup.sh" ]; then
+  bash "/tmp/exam-assets/scripts/setup/comprehensive_setup.sh"
+fi
+
+#Run individual setup scripts in parallel for faster execution
+log "Running individual setup scripts in parallel..."
 for script in /tmp/exam-assets/scripts/setup/q*_setup.sh; do 
   if [ -f "$script" ]; then
     bash "$script" &

@@ -4,13 +4,13 @@
 
 echo "Setting up Question 6 environment..."
 
-# Create namespace
-kubectl create namespace sp-culator
+# Create namespace (idempotent)
+kubectl create namespace sp-culator --dry-run=client -o yaml | kubectl apply -f -
 
-# Create front-end deployment
-kubectl create deployment front-end --image=nginx:1.21 -n sp-culator --replicas=2
+# Create front-end deployment (idempotent)
+kubectl create deployment front-end --image=nginx:1.21 -n sp-culator --replicas=2 --dry-run=client -o yaml | kubectl apply -f -
 
-# Add label for service selector
-kubectl label deployment front-end app=front-end -n sp-culator
+# Add label for service selector (idempotent)
+kubectl label deployment front-end app=front-end -n sp-culator --overwrite
 
 echo "Question 6 environment ready: sp-culator namespace with front-end deployment"
