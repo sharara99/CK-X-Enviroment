@@ -19,15 +19,15 @@ if ! docker info > /dev/null 2>&1; then
   log "Docker is not running"
   log "Attempting to start docker"
   dockerd &
-  sleep 5
-  #check docker is running 3 times with 5 second interval
+  sleep 2
+  #check docker is running 3 times with 2 second interval
   for i in {1..3}; do
     if docker info > /dev/null 2>&1; then
       log "Docker started successfully"
       break
     fi
     log "Docker failed to start, retrying..."
-    sleep 5
+    sleep 2
   done
 fi
 
@@ -59,11 +59,11 @@ echo "Exam assets downloaded and prepared successfully"
 
 export KUBECONFIG=/home/candidate/.kube/kubeconfig
 
-sleep 5
+sleep 2
 
 #wait till api-server is ready
 while ! kubectl get nodes > /dev/null 2>&1; do
-  sleep 5
+  sleep 2
 done
 
 echo "API server is ready"

@@ -3,8 +3,8 @@ FROM docker:dind
 # Accept build-time architecture argument
 ARG TARGETARCH
 
-#install curl
-RUN apk add --no-cache curl
+#install curl and bash
+RUN apk add --no-cache curl bash
 # use our own to start kind cluster
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
@@ -19,6 +19,15 @@ COPY scripts/ /usr/local/bin/
 RUN chmod +x /usr/local/bin/env-setup
 RUN chmod +x /usr/local/bin/env-cleanup
 RUN chmod +x /usr/local/bin/k3d-install.sh
+
+# Pre-install k3d to avoid startup delay
+RUN /usr/local/bin/k3d-install.sh
+
+# Pre-pull k3d images to avoid download delays during cluster creation
+RUN k3d version || true
+RUN docker pull ghcr.io/k3d-io/k3d-tools:5.8.3 || true
+RUN docker pull docker.io/rancher/k3s:v1.31.5-k3s1 || true
+RUN docker pull kindest/node:v1.32.3 || true
 
 ENV KIND_DEFAULT_VERSION=v1.32.3
 

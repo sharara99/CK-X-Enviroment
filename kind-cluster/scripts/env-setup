@@ -39,6 +39,14 @@ if ! command -v k3d &> /dev/null; then
     fi
 fi
 
+# Check if cluster already exists and reuse it for faster startup
+if k3d cluster list | grep -q "$CLUSTER_NAME"; then
+    echo "$(date '+%Y-%m-%d %H:%M:%S') | ✅ Cluster '$CLUSTER_NAME' already exists, reusing it for faster startup"
+    echo "$(date '+%Y-%m-%d %H:%M:%S') | Skipping cluster creation to save time"
+    exit 0
+fi
+
+echo "$(date '+%Y-%m-%d %H:%M:%S') | Creating new cluster '$CLUSTER_NAME' with $NUM_WORKERS worker nodes"
 
 # Delete cluster config if exists
 if [ -f "k3d-config.yaml" ]; then  
