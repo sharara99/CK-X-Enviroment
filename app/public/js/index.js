@@ -311,10 +311,18 @@ document.addEventListener('DOMContentLoaded', function() {
         // Enable the lab name select
         examNameSelect.disabled = false;
         
-        // If there are labs in this category, select the first one
+        // If there are labs in this category, prioritize 2025 exam, then select the first one
         if (filteredLabs.length > 0) {
-            examNameSelect.value = filteredLabs[0].id;
-            updateLabDescription(filteredLabs[0]);
+            // Look for 2025 exam first
+            const exam2025 = filteredLabs.find(lab => lab.id === 'cka-2025-real');
+            if (exam2025) {
+                examNameSelect.value = exam2025.id;
+                updateLabDescription(exam2025);
+            } else {
+                // If no 2025 exam, select the first one
+                examNameSelect.value = filteredLabs[0].id;
+                updateLabDescription(filteredLabs[0]);
+            }
         } else {
             examDescription.textContent = 'No labs available for this category.';
             startSelectedExamBtn.disabled = true;
