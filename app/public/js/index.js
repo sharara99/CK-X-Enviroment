@@ -280,8 +280,11 @@ document.addEventListener('DOMContentLoaded', function() {
         // Get unique categories
         const categories = [...new Set(labs.map(lab => lab.category))];
         
-        // If CKAD is available, select it by default
-        if (categories.includes('CKAD')) {
+        // If CKA is available, select it by default (prioritize CKA 2025 questions)
+        if (categories.includes('CKA')) {
+            examCategorySelect.value = 'CKA';
+            filterLabsByCategory('CKA');
+        } else if (categories.includes('CKAD')) {
             examCategorySelect.value = 'CKAD';
             filterLabsByCategory('CKAD');
         } else if (categories.length > 0) {
