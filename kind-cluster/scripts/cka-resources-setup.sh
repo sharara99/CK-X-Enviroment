@@ -325,7 +325,7 @@ echo "$(date '+%Y-%m-%d %H:%M:%S') | ✅ autoscale namespace resources created"
 # ===============================================================================
 echo "$(date '+%Y-%m-%d %H:%M:%S') | Creating nginx-static namespace resources..."
 
-# Create nginx-config ConfigMap
+# Create nginx-config ConfigMap (without TLS for exam practice)
 cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: ConfigMap
@@ -337,10 +337,7 @@ data:
     events {}
     http {
       server {
-        listen 443 ssl;
-        ssl_certificate /etc/nginx/tls/tls.crt;
-        ssl_certificate_key /etc/nginx/tls/tls.key;
-        ssl_protocols TLSv1.2 TLSv1.3;
+        listen 80;
         location / {
           root /usr/share/nginx/html;
           index index.html;
@@ -349,20 +346,7 @@ data:
     }
 EOF
 
-# Create TLS secret
-cat <<EOF | kubectl apply -f -
-apiVersion: v1
-kind: Secret
-metadata:
-  name: nginx-tls
-  namespace: nginx-static
-type: kubernetes.io/tls
-data:
-  tls.crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0t
-  tls.key: LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0t
-EOF
-
-# Create nginx-static deployment
+# Create nginx-static deployment (without TLS volumes)
 cat <<EOF | kubectl apply -f -
 apiVersion: apps/v1
 kind: Deployment
@@ -383,20 +367,15 @@ spec:
       - name: nginx-static
         image: nginx:alpine
         ports:
-        - containerPort: 443
+        - containerPort: 80
         volumeMounts:
         - name: nginx-config
           mountPath: /etc/nginx/nginx.conf
           subPath: nginx.conf
-        - name: nginx-tls
-          mountPath: /etc/nginx/tls
       volumes:
       - name: nginx-config
         configMap:
           name: nginx-config
-      - name: nginx-tls
-        secret:
-          secretName: nginx-tls
 EOF
 
 echo "$(date '+%Y-%m-%d %H:%M:%S') | ✅ nginx-static namespace resources created"
