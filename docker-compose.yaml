@@ -5,7 +5,6 @@ x-buildkit: &buildkit
 services:
   # VNC Server (Ubuntu)
   remote-desktop:
-    image: nishanb/ck-x-simulator-remote-desktop:latest
     build:
       context: ./remote-desktop
       args:
@@ -39,7 +38,6 @@ services:
 
   # Web Application (not directly exposed to users)
   webapp:
-    image: nishanb/ck-x-simulator-webapp:latest
     build:
       context: ./app
       args:
@@ -74,7 +72,6 @@ services:
 
   # Nginx Reverse Proxy - ONLY SERVICE EXPOSED TO USERS
   nginx:
-    image: nishanb/ck-x-simulator-nginx:latest
     build:
       context: ./nginx
     depends_on:
@@ -103,7 +100,6 @@ services:
 
   # Jump Host (ckad9999 and ckad9988)
   jumphost:
-    image: nishanb/ck-x-simulator-jumphost:latest
     build:
       context: ./jumphost
     hostname: ckad9999
@@ -131,7 +127,6 @@ services:
 
   # Remote Terminal Service
   remote-terminal:
-    image: nishanb/ck-x-simulator-remote-terminal:latest
     build:
       context: ./remote-terminal
     hostname: remote-terminal
@@ -155,7 +150,6 @@ services:
 
   # KIND Kubernetes Cluster
   k8s-api-server: # Service name that will be used for DNS resolution
-    image: nishanb/ck-x-simulator-cluster:latest
     build:
       context: ./kind-cluster
       args:
@@ -218,7 +212,6 @@ services:
 
   # Facilitator Service
   facilitator:
-    image: nishanb/ck-x-simulator-facilitator:latest
     build:
       context: ./facilitator
       dockerfile: Dockerfile

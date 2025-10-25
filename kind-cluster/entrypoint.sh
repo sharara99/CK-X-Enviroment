@@ -63,12 +63,12 @@ metadata:
 servers: 1
 agents: 1
 ports:
-  - port: "0:6443"
+  - port: "6443:6443"
     nodeFilters:
       - loadbalancer
 kubeAPI:
   host: "0.0.0.0"
-  hostPort: "0"
+  hostPort: "6443"
 options:
   k3s:
     extraArgs:
