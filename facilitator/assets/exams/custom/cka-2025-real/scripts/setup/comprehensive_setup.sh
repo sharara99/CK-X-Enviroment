@@ -67,16 +67,71 @@ kubectl create deployment nginx-static --image=nginx:latest -n nginx-static --dr
 kubectl create configmap nginx-config -n nginx-static --from-literal=nginx.conf='events {}
 http {
   server {
-    listen 443 ssl;
-    ssl_certificate /etc/nginx/tls/tls.crt;
-    ssl_certificate_key /etc/nginx/tls/tls.key;
-    ssl_protocols TLSv1.2 TLSv1.3;
+    listen 80;
     location / {
       root /usr/share/nginx/html;
       index index.html;
     }
   }
 }' --dry-run=client -o yaml | kubectl apply -f -
+
+# Question 15: Create NetworkPolicy scenario resources
+echo "$(date '+%Y-%m-%d %H:%M:%S') | 🔧 Setting up Question 15: NetworkPolicy Selection..."
+kubectl create namespace frontend --dry-run=client -o yaml | kubectl apply -f -
+kubectl create namespace backend --dry-run=client -o yaml | kubectl apply -f -
+kubectl create namespace database --dry-run=client -o yaml | kubectl apply -f -
+kubectl label namespace frontend name=frontend --overwrite
+kubectl label namespace backend name=backend --overwrite
+kubectl label namespace database name=database --overwrite
+
+# Create frontend deployment
+kubectl create deployment frontend-app --image=nginx:alpine -n frontend --replicas=2 --dry-run=client -o yaml | kubectl apply -f -
+
+# Create backend deployment
+kubectl create deployment backend-api --image=nginx:alpine -n backend --replicas=2 --dry-run=client -o yaml | kubectl apply -f -
+
+# Create database deployment
+kubectl create deployment database --image=mysql:8.0 -n database --replicas=1 --dry-run=client -o yaml | kubectl apply -f -
+
+# Create sample NetworkPolicies for selection
+cat <<EOF | kubectl apply -f -
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: backend-allow-all
+  namespace: backend
+spec:
+  podSelector:
+    matchLabels:
+      app: backend-api
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - {}
+  egress:
+  - {}
+EOF
+
+cat <<EOF | kubectl apply -f -
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: backend-deny-all
+  namespace: backend
+spec:
+  podSelector:
+    matchLabels:
+      app: backend-api
+  policyTypes:
+  - Ingress
+  - Egress
+EOF
+
+# Question 16: Troubleshooting scenario (no additional resources needed)
+echo "$(date '+%Y-%m-%d %H:%M:%S') | 🔧 Setting up Question 16: Troubleshooting kube-apiserver and kube-scheduler..."
+echo "Scenario: kube-apiserver and kube-scheduler are not working"
+echo "etcd, kube-controller-manager, and kubelet are working"
 
 # Wait for deployments to be ready - OPTIMIZED (reduced timeout)
 echo "$(date '+%Y-%m-%d %H:%M:%S') | ⏳ Waiting for deployments to be ready..."
@@ -88,12 +143,16 @@ kubectl wait --for=condition=available --timeout=30s deployment/wordpress -n rel
 kubectl wait --for=condition=available --timeout=30s deployment/mariadb -n mariadb || true
 kubectl wait --for=condition=available --timeout=30s deployment/apache-server -n autoscale || true
 kubectl wait --for=condition=available --timeout=30s deployment/nginx-static -n nginx-static || true
+kubectl wait --for=condition=available --timeout=30s deployment/frontend-app -n frontend || true
+kubectl wait --for=condition=available --timeout=30s deployment/backend-api -n backend || true
+kubectl wait --for=condition=available --timeout=30s deployment/database -n database || true
 
 echo "$(date '+%Y-%m-%d %H:%M:%S') | ✅ CKA 2025 exam setup completed successfully!"
 echo "$(date '+%Y-%m-%d %H:%M:%S') | 📋 Created resources:"
-echo "  - Namespaces: echo-sound, priority, sp-culator, relative-fawn, mariadb, autoscale, nginx-static, app-team1"
-echo "  - Deployments: echoserver, busybox-logger, front-end, synergy-deployment, wordpress, mariadb, apache-server, nginx-static"
+echo "  - Namespaces: echo-sound, priority, sp-culator, relative-fawn, mariadb, autoscale, nginx-static, app-team1, frontend, backend, database"
+echo "  - Deployments: echoserver, busybox-logger, front-end, synergy-deployment, wordpress, mariadb, apache-server, nginx-static, frontend-app, backend-api, database"
 echo "  - Services: echoserver-service"
 echo "  - ConfigMaps: nginx-config"
+echo "  - NetworkPolicies: backend-allow-all, backend-deny-all (for selection)"
 
 exit 0

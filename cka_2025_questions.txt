@@ -570,6 +570,95 @@ o Per pod (3 replicas): CPU = 600m, Memory = 1200Mi
 
     https://kubernetes.io/docs/concepts/configuration/configmap/
 
+    15. NetworkPolicy Selection
+
+    Task: Select one out of the three NetworkPolicy manifests which matches the scenario described in the question (e.g., backend pods should only have ingress traffic from the frontend namespace).
+
+    Steps:
+
+    1. Analyze the scenario requirements:
+       - Identify which pods need network access
+       - Determine ingress/egress rules needed
+       - Check namespace restrictions
+
+    2. Review the three NetworkPolicy options:
+       - Check podSelector labels
+       - Verify ingress/egress rules
+       - Ensure namespace selectors match requirements
+
+    3. Select the correct NetworkPolicy:
+       - Match podSelector with target pods
+       - Verify ingress rules allow required traffic
+       - Ensure egress rules don't block necessary communication
+
+    4. Apply the selected NetworkPolicy:
+       k apply -f selected-networkpolicy.yaml
+
+    5. Verify the NetworkPolicy:
+       k get networkpolicy -n <namespace>
+       k describe networkpolicy <name> -n <namespace>
+
+    Tip: Use k describe to understand existing NetworkPolicies and their effects.
+
+    https://kubernetes.io/docs/concepts/services-networking/network-policies/
+
+    _________________________________________________________________________________________________
+
+    16. Troubleshooting kube-apiserver and kube-scheduler
+
+    Task: kube-apiserver and kube-scheduler in a cluster were not working, but etcd, kube-controller-manager, and kubelet were. Troubleshoot and fix the issue.
+
+    Steps:
+
+    1. Check systemd service status:
+       systemctl status kube-apiserver
+       systemctl status kube-scheduler
+
+    2. Check service logs:
+       journalctl -u kube-apiserver -f
+       journalctl -u kube-scheduler -f
+
+    3. Check configuration files:
+       ls -la /etc/kubernetes/manifests/
+       cat /etc/kubernetes/manifests/kube-apiserver.yaml
+       cat /etc/kubernetes/manifests/kube-scheduler.yaml
+
+    4. Common issues and fixes:
+
+       a) Missing certificates:
+          - Check certificate files exist
+          - Verify certificate permissions
+          - Regenerate if needed:
+            kubeadm init phase certs apiserver
+            kubeadm init phase certs apiserver-kubelet-client
+
+       b) Configuration errors:
+          - Check YAML syntax
+          - Verify API server arguments
+          - Check scheduler configuration
+
+       c) Resource issues:
+          - Check disk space
+          - Verify memory availability
+          - Check CPU usage
+
+       d) Network issues:
+          - Verify API server bind address
+          - Check firewall rules
+          - Test network connectivity
+
+    5. Restart services:
+       systemctl restart kube-apiserver
+       systemctl restart kube-scheduler
+
+    6. Verify cluster health:
+       kubectl get nodes
+       kubectl get pods -n kube-system
+
+    Tip: Check /var/log/kubernetes/ for additional logs if systemd logs are insufficient.
+
+    https://kubernetes.io/docs/tasks/debug-application-cluster/debug-cluster/
+
     5. Exam Day Tips
     On exam day, stay calm and organized:
 

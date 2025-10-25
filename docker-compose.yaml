@@ -162,6 +162,8 @@ services:
       DOCKER_TLS_CERTDIR: ""
     expose:
       - "22"
+      - "6445"
+      - "8080"
     volumes:
       - kube-config:/home/candidate/.kube # Shared volume for Kubernetes config
     # DNS resolution for image pulling with better timeout handling

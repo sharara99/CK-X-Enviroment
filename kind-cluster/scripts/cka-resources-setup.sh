@@ -381,6 +381,157 @@ EOF
 echo "$(date '+%Y-%m-%d %H:%M:%S') | ✅ nginx-static namespace resources created"
 
 # ===============================================================================
+#   Create NetworkPolicy resources (Question 15)
+# ===============================================================================
+echo "$(date '+%Y-%m-%d %H:%M:%S') | Creating NetworkPolicy resources..."
+
+# Create frontend namespace and resources
+kubectl create namespace frontend --dry-run=client -o yaml | kubectl apply -f -
+kubectl create namespace backend --dry-run=client -o yaml | kubectl apply -f -
+kubectl create namespace database --dry-run=client -o yaml | kubectl apply -f -
+
+# Create frontend deployment
+cat <<EOF | kubectl apply -f -
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-app
+  namespace: frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: frontend-app
+  template:
+    metadata:
+      labels:
+        app: frontend-app
+    spec:
+      containers:
+      - name: frontend-app
+        image: nginx:alpine
+        ports:
+        - containerPort: 80
+EOF
+
+# Create backend deployment
+cat <<EOF | kubectl apply -f -
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-api
+  namespace: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backend-api
+  template:
+    metadata:
+      labels:
+        app: backend-api
+    spec:
+      containers:
+      - name: backend-api
+        image: nginx:alpine
+        ports:
+        - containerPort: 8080
+EOF
+
+# Create database deployment
+cat <<EOF | kubectl apply -f -
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: database
+  namespace: database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: database
+  template:
+    metadata:
+      labels:
+        app: database
+    spec:
+      containers:
+      - name: database
+        image: mysql:8.0
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "password"
+        ports:
+        - containerPort: 3306
+EOF
+
+# Create sample NetworkPolicies for selection
+cat <<EOF | kubectl apply -f -
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: backend-allow-frontend
+  namespace: backend
+spec:
+  podSelector:
+    matchLabels:
+      app: backend-api
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: frontend
+    ports:
+    - protocol: TCP
+      port: 8080
+EOF
+
+cat <<EOF | kubectl apply -f -
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: database-allow-backend
+  namespace: database
+spec:
+  podSelector:
+    matchLabels:
+      app: database
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: backend
+    ports:
+    - protocol: TCP
+      port: 3306
+EOF
+
+cat <<EOF | kubectl apply -f -
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: frontend-allow-all
+  namespace: frontend
+spec:
+  podSelector:
+    matchLabels:
+      app: frontend-app
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - {}
+  egress:
+  - {}
+EOF
+
+echo "$(date '+%Y-%m-%d %H:%M:%S') | ✅ NetworkPolicy resources created"
+
+# ===============================================================================
 #   Create StorageClass (Question 7)
 # ===============================================================================
 echo "$(date '+%Y-%m-%d %H:%M:%S') | Creating StorageClass..."
@@ -412,6 +563,9 @@ kubectl wait --for=condition=Available deployment/wordpress -n relative-fawn --t
 kubectl wait --for=condition=Available deployment/mariadb -n mariadb --timeout=300s
 kubectl wait --for=condition=Available deployment/apache-server -n autoscale --timeout=300s
 kubectl wait --for=condition=Available deployment/nginx-static -n nginx-static --timeout=300s
+kubectl wait --for=condition=Available deployment/frontend-app -n frontend --timeout=300s
+kubectl wait --for=condition=Available deployment/backend-api -n backend --timeout=300s
+kubectl wait --for=condition=Available deployment/database -n database --timeout=300s
 
 echo "$(date '+%Y-%m-%d %H:%M:%S') | ✅ All deployments are ready"
 
@@ -422,13 +576,16 @@ echo "$(date '+%Y-%m-%d %H:%M:%S') | ===== CKA RESOURCES SETUP COMPLETED ====="
 echo "$(date '+%Y-%m-%d %H:%M:%S') | Summary of created resources:"
 echo ""
 echo "Namespaces:"
-kubectl get namespaces | grep -E "(echo-sound|priority|sp-culator|relative-fawn|mariadb|autoscale|nginx-static|argocd|cert-manager|tigera-operator)"
+kubectl get namespaces | grep -E "(echo-sound|priority|sp-culator|relative-fawn|mariadb|autoscale|nginx-static|argocd|cert-manager|tigera-operator|frontend|backend|database)"
 echo ""
 echo "Deployments:"
-kubectl get deployments --all-namespaces | grep -E "(echoserver|busybox-logger|front-end|synergy-deployment|web|wordpress|mariadb|apache-server|nginx-static)"
+kubectl get deployments --all-namespaces | grep -E "(echoserver|busybox-logger|front-end|synergy-deployment|web|wordpress|mariadb|apache-server|nginx-static|frontend-app|backend-api|database)"
 echo ""
 echo "Services:"
 kubectl get services --all-namespaces | grep -E "(echoserver-service|web)"
+echo ""
+echo "NetworkPolicies:"
+kubectl get networkpolicies --all-namespaces
 echo ""
 echo "StorageClass:"
 kubectl get storageclass
