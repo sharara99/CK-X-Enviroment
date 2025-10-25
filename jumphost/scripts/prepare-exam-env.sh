@@ -59,25 +59,31 @@ echo "Exam assets downloaded and prepared successfully"
 
 export KUBECONFIG=/home/candidate/.kube/kubeconfig
 
-sleep 2
+sleep 1
 
-#wait till api-server is ready (with timeout)
+#wait till api-server is ready (with timeout) - OPTIMIZED
 API_CHECK_COUNT=0
 while ! kubectl get nodes > /dev/null 2>&1; do
   API_CHECK_COUNT=$((API_CHECK_COUNT+1))
-  if [ $API_CHECK_COUNT -gt 30 ]; then
-    log "ERROR: API server not ready after 60 seconds"
+  if [ $API_CHECK_COUNT -gt 15 ]; then
+    log "ERROR: API server not ready after 30 seconds"
     exit 1
   fi
-  sleep 2
+  sleep 1
 done
 
 echo "API server is ready"
 
-#Run comprehensive setup first
-log "Running comprehensive CKA 2025 setup..."
-if [ -f "/tmp/exam-assets/scripts/setup/comprehensive_setup.sh" ]; then
-  bash "/tmp/exam-assets/scripts/setup/comprehensive_setup.sh"
+#Run fast setup for speed optimization
+log "Running FAST CKA 2025 setup..."
+if [ -f "/tmp/exam-assets/scripts/setup/fast_setup.sh" ]; then
+  bash "/tmp/exam-assets/scripts/setup/fast_setup.sh"
+else
+  # Fallback to comprehensive setup if fast setup not available
+  log "Fast setup not found, using comprehensive setup..."
+  if [ -f "/tmp/exam-assets/scripts/setup/comprehensive_setup.sh" ]; then
+    bash "/tmp/exam-assets/scripts/setup/comprehensive_setup.sh"
+  fi
 fi
 
 #Run individual setup scripts in parallel for faster execution

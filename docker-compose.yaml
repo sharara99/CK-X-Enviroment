@@ -1,6 +1,8 @@
-# Enable BuildKit for faster builds
+# Enable BuildKit for faster builds and parallel processing
 x-buildkit: &buildkit
   BUILDKIT_INLINE_CACHE: 1
+  DOCKER_BUILDKIT: 1
+  COMPOSE_DOCKER_CLI_BUILD: 1
 
 services:
   # VNC Server (Ubuntu)
@@ -9,8 +11,6 @@ services:
       context: ./remote-desktop
       args:
         BUILDKIT_INLINE_CACHE: 1
-      cache_from:
-        - nishanb/ck-x-simulator-remote-desktop:latest
     hostname: terminal
     expose:
       - "5901" # VNC port (internal only)
@@ -22,9 +22,9 @@ services:
       - VNC_RESOLUTION=1280x800
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:6901/"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
+      interval: 5s
+      timeout: 3s
+      retries: 2
     deploy:
       resources:
         limits:
@@ -42,8 +42,6 @@ services:
       context: ./app
       args:
         BUILDKIT_INLINE_CACHE: 1
-      cache_from:
-        - nishanb/ck-x-simulator-webapp:latest
     expose:
       - "3000" # Only exposed to internal network
     environment:
@@ -64,9 +62,9 @@ services:
           memory: 512M
     healthcheck:
       test: ["CMD", "wget", "-q", "-O", "-", "http://localhost:3000/"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
+      interval: 5s
+      timeout: 3s
+      retries: 2
     networks:
       - ckx-network
 
@@ -92,9 +90,9 @@ services:
           memory: 128M
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost/"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
+      interval: 5s
+      timeout: 3s
+      retries: 2
     networks:
       - ckx-network
 
@@ -121,9 +119,9 @@ services:
       - ckx-network
     healthcheck:
       test: ["CMD", "nc", "-z", "localhost", "22"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
+      interval: 5s
+      timeout: 3s
+      retries: 2
 
   # Remote Terminal Service
   remote-terminal:
@@ -132,6 +130,8 @@ services:
     hostname: remote-terminal
     expose:
       - "22" # SSH port (internal only)
+    volumes:
+      - kube-config:/home/candidate/.kube # Shared volume for Kubernetes config
     deploy:
       resources:
         limits:
@@ -144,9 +144,9 @@ services:
       - ckx-network
     healthcheck:
       test: ["CMD", "nc", "-z", "localhost", "22"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
+      interval: 5s
+      timeout: 3s
+      retries: 2
 
   # KIND Kubernetes Cluster
   k8s-api-server: # Service name that will be used for DNS resolution
@@ -154,21 +154,25 @@ services:
       context: ./kind-cluster
       args:
         BUILDKIT_INLINE_CACHE: 1
-      cache_from:
-        - nishanb/ck-x-simulator-cluster:latest
     container_name: kind-cluster
     hostname: k8s-api-server
     privileged: true # Required for running containers inside KIND
-    environment: []
+    environment:
+      DOCKER_HOST: unix:///var/run/docker.sock
+      DOCKER_TLS_CERTDIR: ""
     expose:
       - "22"
     volumes:
       - kube-config:/home/candidate/.kube # Shared volume for Kubernetes config
-    # DNS resolution for image pulling
+    # DNS resolution for image pulling with better timeout handling
     dns:
       - "8.8.8.8"
       - "8.8.4.4"
       - "1.1.1.1"
+    dns_search: []
+    dns_opt:
+      - "timeout:3"
+      - "attempts:3"
     deploy:
       resources:
         limits:
@@ -217,8 +221,6 @@ services:
       dockerfile: Dockerfile
       args:
         BUILDKIT_INLINE_CACHE: 1
-      cache_from:
-        - nishanb/ck-x-simulator-facilitator:latest
     hostname: facilitator
     expose:
       - "3000"

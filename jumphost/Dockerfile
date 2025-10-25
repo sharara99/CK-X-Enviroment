@@ -68,7 +68,9 @@ RUN echo "candidate:x:1000:1000:candidate:/home/candidate:/bin/bash" >> /etc/pas
 
 # Set up Minikube cluster on startup
 RUN mkdir -p /home/candidate/.kube /home/candidate/.minikube
-RUN chown -R candidate: /home/candidate/.kube /home/candidate/.minikube
+RUN chown -R candidate:candidate /home/candidate/.kube /home/candidate/.minikube
+RUN chmod 755 /home/candidate/.kube
+RUN chmod 755 /home/candidate/.minikube
 
 # Copy exam environment scripts
 COPY scripts/prepare-exam-env.sh /usr/local/bin/prepare-exam-env

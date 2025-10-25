@@ -4,16 +4,29 @@
 
 echo "$(date '+%Y-%m-%d %H:%M:%S') | 🚀 Starting comprehensive CKA 2025 exam setup..."
 
-# Create all required namespaces
+# Pre-pull common images for faster deployments
+echo "$(date '+%Y-%m-%d %H:%M:%S') | 📦 Pre-pulling common images..."
+docker pull k8s.gcr.io/echoserver:1.4 &
+docker pull busybox:stable &
+docker pull nginx:1.21 &
+docker pull wordpress:latest &
+docker pull mariadb:latest &
+docker pull httpd:latest &
+docker pull nginx:latest &
+wait
+echo "$(date '+%Y-%m-%d %H:%M:%S') | ✅ Images pre-pulled successfully"
+
+# Create all required namespaces in parallel
 echo "$(date '+%Y-%m-%d %H:%M:%S') | 📁 Creating namespaces..."
-kubectl create namespace echo-sound --dry-run=client -o yaml | kubectl apply -f -
-kubectl create namespace priority --dry-run=client -o yaml | kubectl apply -f -
-kubectl create namespace sp-culator --dry-run=client -o yaml | kubectl apply -f -
-kubectl create namespace relative-fawn --dry-run=client -o yaml | kubectl apply -f -
-kubectl create namespace mariadb --dry-run=client -o yaml | kubectl apply -f -
-kubectl create namespace autoscale --dry-run=client -o yaml | kubectl apply -f -
-kubectl create namespace nginx-static --dry-run=client -o yaml | kubectl apply -f -
-kubectl create namespace app-team1 --dry-run=client -o yaml | kubectl apply -f -
+kubectl create namespace echo-sound --dry-run=client -o yaml | kubectl apply -f - &
+kubectl create namespace priority --dry-run=client -o yaml | kubectl apply -f - &
+kubectl create namespace sp-culator --dry-run=client -o yaml | kubectl apply -f - &
+kubectl create namespace relative-fawn --dry-run=client -o yaml | kubectl apply -f - &
+kubectl create namespace mariadb --dry-run=client -o yaml | kubectl apply -f - &
+kubectl create namespace autoscale --dry-run=client -o yaml | kubectl apply -f - &
+kubectl create namespace nginx-static --dry-run=client -o yaml | kubectl apply -f - &
+kubectl create namespace app-team1 --dry-run=client -o yaml | kubectl apply -f - &
+wait
 
 echo "$(date '+%Y-%m-%d %H:%M:%S') | ✅ All namespaces created"
 
@@ -65,16 +78,16 @@ http {
   }
 }' --dry-run=client -o yaml | kubectl apply -f -
 
-# Wait for deployments to be ready
+# Wait for deployments to be ready - OPTIMIZED (reduced timeout)
 echo "$(date '+%Y-%m-%d %H:%M:%S') | ⏳ Waiting for deployments to be ready..."
-kubectl wait --for=condition=available --timeout=60s deployment/echoserver -n echo-sound || true
-kubectl wait --for=condition=available --timeout=60s deployment/busybox-logger -n priority || true
-kubectl wait --for=condition=available --timeout=60s deployment/front-end -n sp-culator || true
-kubectl wait --for=condition=available --timeout=60s deployment/synergy-deployment -n default || true
-kubectl wait --for=condition=available --timeout=60s deployment/wordpress -n relative-fawn || true
-kubectl wait --for=condition=available --timeout=60s deployment/mariadb -n mariadb || true
-kubectl wait --for=condition=available --timeout=60s deployment/apache-server -n autoscale || true
-kubectl wait --for=condition=available --timeout=60s deployment/nginx-static -n nginx-static || true
+kubectl wait --for=condition=available --timeout=30s deployment/echoserver -n echo-sound || true
+kubectl wait --for=condition=available --timeout=30s deployment/busybox-logger -n priority || true
+kubectl wait --for=condition=available --timeout=30s deployment/front-end -n sp-culator || true
+kubectl wait --for=condition=available --timeout=30s deployment/synergy-deployment -n default || true
+kubectl wait --for=condition=available --timeout=30s deployment/wordpress -n relative-fawn || true
+kubectl wait --for=condition=available --timeout=30s deployment/mariadb -n mariadb || true
+kubectl wait --for=condition=available --timeout=30s deployment/apache-server -n autoscale || true
+kubectl wait --for=condition=available --timeout=30s deployment/nginx-static -n nginx-static || true
 
 echo "$(date '+%Y-%m-%d %H:%M:%S') | ✅ CKA 2025 exam setup completed successfully!"
 echo "$(date '+%Y-%m-%d %H:%M:%S') | 📋 Created resources:"
