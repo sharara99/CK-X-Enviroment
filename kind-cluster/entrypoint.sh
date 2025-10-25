@@ -89,6 +89,16 @@ else
     echo "$(date '+%Y-%m-%d %H:%M:%S') | k3d cluster already exists, skipping creation"
 fi
 
+# ===============================================================================
+#   Setup CKA Exam Resources
+# ===============================================================================
+echo "$(date '+%Y-%m-%d %H:%M:%S') | Setting up CKA exam resources..."
+if [ -f /usr/local/bin/cka-resources-setup.sh ]; then
+    /usr/local/bin/cka-resources-setup.sh
+else
+    echo "$(date '+%Y-%m-%d %H:%M:%S') | [WARNING] CKA resources setup script not found"
+fi
+
 sleep 1
 touch /ready
 
