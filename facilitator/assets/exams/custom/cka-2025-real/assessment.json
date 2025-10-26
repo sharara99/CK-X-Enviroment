@@ -321,6 +321,38 @@
           "weightage": 2
         }
       ]
+    },
+    {
+      "id": "15",
+      "namespace": "backend",
+      "machineHostname": "ckad9999",
+      "question": "NetworkPolicy Selection\n\nTask: Select the correct NetworkPolicy for backend-api pods to only allow ingress traffic from the frontend namespace.\n\nRequirements:\n- Backend pods should only allow ingress from frontend namespace\n- Backend pods labeled app=backend-api in namespace backend\n- Frontend namespace labeled name=frontend\n- Create a NetworkPolicy named backend-allow-frontend\n\nDO NOT use backend-allow-all or backend-deny-all - create a new one.",
+      "concepts": ["network policies", "ingress", "namespace selectors"],
+      "verification": [
+        {
+          "id": "1",
+          "description": "Correct NetworkPolicy exists allowing ingress from frontend namespace",
+          "verificationScriptFile": "q15_s1_validate_networkpolicy.sh",
+          "expectedOutput": "0",
+          "weightage": 5
+        }
+      ]
+    },
+    {
+      "id": "16",
+      "namespace": "default",
+      "machineHostname": "ckad9999",
+      "question": "Troubleshooting kube-apiserver and kube-scheduler\n\nTask: Troubleshoot and fix kube-apiserver and kube-scheduler services that are not working.\n\nScenario:\n- kube-apiserver and kube-scheduler services are not running\n- etcd, kube-controller-manager, and kubelet are working\n- Cluster components need to be restored\n\nSteps:\n1. Check service status\n2. Check logs for errors\n3. Check certificates and configurations\n4. Restart services if needed\n5. Verify cluster health\n\nVerify that both services are running and the cluster is healthy.",
+      "concepts": ["troubleshooting", "kube-apiserver", "kube-scheduler", "systemd", "cluster health"],
+      "verification": [
+        {
+          "id": "1",
+          "description": "kube-apiserver and kube-scheduler services are running and cluster is healthy",
+          "verificationScriptFile": "q16_s1_validate_cluster_health.sh",
+          "expectedOutput": "0",
+          "weightage": 5
+        }
+      ]
     }
   ]
 }
