@@ -326,7 +326,7 @@
       "id": "15",
       "namespace": "backend",
       "machineHostname": "ckad9999",
-      "question": "NetworkPolicy Selection\n\nTask: Select the correct NetworkPolicy for backend-api pods to only allow ingress traffic from the frontend namespace.\n\nRequirements:\n- Create a NEW NetworkPolicy named: »backend-allow-frontend«\n- Backend pods labeled: »app=backend-api«\n- Backend namespace: »backend«\n- Frontend namespace labeled: »name=frontend«\n- Only allow ingress traffic from frontend namespace\n- DO NOT use: »backend-allow-all« or »backend-deny-all«\n\nKey Values:\n  NetworkPolicy Name: »backend-allow-frontend«\n  Target Pods: »app=backend-api«\n  Target Namespace: »backend«\n  Source Namespace: »frontend«\n  Source Label: »name=frontend«\n  Forbidden Policies: »backend-allow-all«, »backend-deny-all«",
+      "question": "NetworkPolicy Selection\n\nTask: Select the correct NetworkPolicy for backend-api pods to only allow ingress traffic from the frontend namespace.\n\nRequirements:\n- Create a NEW NetworkPolicy named: [backend-allow-frontend]\n- Backend pods labeled: [app=backend-api]\n- Backend namespace: [backend]\n- Frontend namespace labeled: [name=frontend]\n- Only allow ingress traffic from frontend namespace\n- DO NOT use: [backend-allow-all] or [backend-deny-all]\n\nKey Values:\n  NetworkPolicy Name: [backend-allow-frontend]\n  Target Pods: [app=backend-api]\n  Target Namespace: [backend]\n  Source Namespace: [frontend]\n  Source Label: [name=frontend]\n  Forbidden Policies: [backend-allow-all], [backend-deny-all]",
       "concepts": ["network policies", "ingress", "namespace selectors"],
       "verification": [
         {
