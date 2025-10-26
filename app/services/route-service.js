@@ -19,12 +19,16 @@ class RouteService {
 
         // Catch-all route to serve index.html for any other requests
         app.get('*', (req, res) => {
-            // Special handling for exam page
-            if (req.path === '/exam') {
+            // Special handling for exam page (with .html extension)
+            if (req.path.startsWith('/exam.html')) {
                 res.sendFile(path.join(this.publicService.getPublicDir(), 'exam.html'));
             } 
+            // Special handling for exam page (without .html extension)
+            else if (req.path.startsWith('/exam')) {
+                res.sendFile(path.join(this.publicService.getPublicDir(), 'exam.html'));
+            }
             // Special handling for results page
-            else if (req.path === '/results') {
+            else if (req.path.startsWith('/results')) {
                 res.sendFile(path.join(this.publicService.getPublicDir(), 'results.html'));
             }
             else {
