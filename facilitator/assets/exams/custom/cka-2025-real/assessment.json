@@ -326,7 +326,7 @@
       "id": "15",
       "namespace": "backend",
       "machineHostname": "ckad9999",
-      "question": "NetworkPolicy Selection\n\nTask: Select the correct NetworkPolicy for backend-api pods to only allow ingress traffic from the frontend namespace.\n\nRequirements:\n- Backend pods should only allow ingress from frontend namespace\n- Backend pods labeled app=backend-api in namespace backend\n- Frontend namespace labeled name=frontend\n- Create a NetworkPolicy named backend-allow-frontend\n\nDO NOT use backend-allow-all or backend-deny-all - create a new one.",
+      "question": "NetworkPolicy Selection\n\nTask: Select the correct NetworkPolicy for backend-api pods to only allow ingress traffic from the frontend namespace.\n\nRequirements:\n- Create a NEW NetworkPolicy named: backend-allow-frontend\n- Backend pods labeled: app=backend-api\n- Backend namespace: backend\n- Frontend namespace labeled: name=frontend\n- Only allow ingress traffic from frontend namespace\n- DO NOT use existing policies (backend-allow-all or backend-deny-all)\n\nKey Points:\n✓ Create a NEW NetworkPolicy\n✓ Name: backend-allow-frontend\n✓ Target pods: app=backend-api in backend namespace\n✓ Ingress source: frontend namespace (label: name=frontend)",
       "concepts": ["network policies", "ingress", "namespace selectors"],
       "verification": [
         {
@@ -342,7 +342,7 @@
       "id": "16",
       "namespace": "default",
       "machineHostname": "ckad9999",
-      "question": "Troubleshooting kube-apiserver and kube-scheduler\n\nTask: Troubleshoot and fix kube-apiserver and kube-scheduler services that are not working.\n\nScenario:\n- kube-apiserver and kube-scheduler services are not running\n- etcd, kube-controller-manager, and kubelet are working\n- Cluster components need to be restored\n\nSteps:\n1. Check service status\n2. Check logs for errors\n3. Check certificates and configurations\n4. Restart services if needed\n5. Verify cluster health\n\nVerify that both services are running and the cluster is healthy.",
+      "question": "Troubleshooting kube-apiserver and kube-scheduler\n\nTask: Troubleshoot and fix kube-apiserver and kube-scheduler services that are not working.\n\nScenario:\n✗ kube-apiserver service: NOT RUNNING\n✗ kube-scheduler service: NOT RUNNING\n✓ etcd service: WORKING\n✓ kube-controller-manager: WORKING\n✓ kubelet: WORKING\n\nTroubleshooting Steps:\n1. Check service status: systemctl status kube-apiserver\n2. Check service status: systemctl status kube-scheduler\n3. Check logs: journalctl -u kube-apiserver -f\n4. Check logs: journalctl -u kube-scheduler -f\n5. Check manifests: ls -la /etc/kubernetes/manifests/\n6. Verify certificates are valid\n7. Restart services: systemctl restart kube-apiserver\n8. Restart services: systemctl restart kube-scheduler\n9. Verify cluster health: kubectl get nodes\n\nVerification: Both services must be RUNNING and cluster must be HEALTHY.",
       "concepts": ["troubleshooting", "kube-apiserver", "kube-scheduler", "systemd", "cluster health"],
       "verification": [
         {
