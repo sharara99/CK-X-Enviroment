@@ -14,6 +14,48 @@ function processQuestionContent(content) {
         '<span class="clickable-url" data-copy-text="$1" title="Click to copy URL">$1</span>'
     );
     
+    // ===== QUESTION 15 SPECIFIC HIGHLIGHTING - MUST BE FIRST =====
+    // Highlight specific values for NetworkPolicy question
+    processedContent = processedContent.replace(
+        /(backend-allow-frontend)/g,
+        '<span class="highlight-yellow" style="background-color: #fff3cd; padding: 2px 4px; border-radius: 3px; font-weight: bold;" data-copy-text="backend-allow-frontend" title="Click to copy">backend-allow-frontend</span>'
+    );
+    
+    processedContent = processedContent.replace(
+        /(app=backend-api)/g,
+        '<span class="highlight-yellow" style="background-color: #fff3cd; padding: 2px 4px; border-radius: 3px; font-weight: bold;" data-copy-text="app=backend-api" title="Click to copy">app=backend-api</span>'
+    );
+    
+    processedContent = processedContent.replace(
+        /(name=frontend)/g,
+        '<span class="highlight-yellow" style="background-color: #fff3cd; padding: 2px 4px; border-radius: 3px; font-weight: bold;" data-copy-text="name=frontend" title="Click to copy">name=frontend</span>'
+    );
+    
+    processedContent = processedContent.replace(
+        /(backend-allow-all|backend-deny-all)/g,
+        '<span class="highlight-red" style="background-color: #f8d7da; padding: 2px 4px; border-radius: 3px; text-decoration: line-through; font-weight: bold;" data-copy-text="$1" title="Do NOT use">$1</span>'
+    );
+    
+    // Highlight standalone "backend" and "frontend" when they appear as values
+    processedContent = processedContent.replace(
+        /([\s\(])(backend)([\s\)])/g,
+        function(match, before, value, after) {
+            // Only highlight if not already inside a span
+            if (match.includes('<span')) return match;
+            return before + '<span class="highlight-blue" style="background-color: #d1ecf1; padding: 2px 4px; border-radius: 3px; font-weight: bold;" data-copy-text="backend" title="Click to copy">backend</span>' + after;
+        }
+    );
+    
+    processedContent = processedContent.replace(
+        /([\s\(])(frontend)([\s\)])/g,
+        function(match, before, value, after) {
+            // Only highlight if not already inside a span
+            if (match.includes('<span')) return match;
+            return before + '<span class="highlight-blue" style="background-color: #d1ecf1; padding: 2px 4px; border-radius: 3px; font-weight: bold;" data-copy-text="frontend" title="Click to copy">frontend</span>' + after;
+        }
+    );
+    // ===== END QUESTION 15 HIGHLIGHTING =====
+    
     // Add click-to-copy functionality for kubectl commands
     processedContent = processedContent.replace(
         /(kubectl\s+[^\n\r<]+)/g,
