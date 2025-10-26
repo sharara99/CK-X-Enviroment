@@ -36,16 +36,16 @@ function processQuestionContent(content) {
         '<span class="highlight-red" style="background-color: #f8d7da; padding: 2px 4px; border-radius: 3px; text-decoration: line-through; font-weight: bold;" data-copy-text="$1" title="Do NOT use">$1</span>'
     );
     
-    // Highlight standalone "backend" word (not in URLs or already highlighted)
+    // Highlight backend - only the word, not when it's part of larger words
     processedContent = processedContent.replace(
-        /\b(backend)\b(?![^<]*>)/g,
-        '<span class="highlight-blue" style="background-color: #d1ecf1; padding: 2px 4px; border-radius: 3px; font-weight: bold;" data-copy-text="backend" title="Click to copy">backend</span>'
+        /(^|\s|>)(backend)(\s|$|<|,|:)/g,
+        '$1<span class="hl-ns" style="background-color: #d1ecf1; padding: 2px 4px; border-radius: 3px; font-weight: bold;" data-copy-text="backend" title="Click to copy">backend</span>$3'
     );
     
-    // Highlight standalone "frontend" word (not in URLs or already highlighted)
+    // Highlight frontend - only the word, not when it's part of larger words
     processedContent = processedContent.replace(
-        /\b(frontend)\b(?![^<]*>)/g,
-        '<span class="highlight-blue" style="background-color: #d1ecf1; padding: 2px 4px; border-radius: 3px; font-weight: bold;" data-copy-text="frontend" title="Click to copy">frontend</span>'
+        /(^|\s|>)(frontend)(\s|$|<|,|:)/g,
+        '$1<span class="hl-ns" style="background-color: #d1ecf1; padding: 2px 4px; border-radius: 3px; font-weight: bold;" data-copy-text="frontend" title="Click to copy">frontend</span>$3'
     );
     // ===== END QUESTION 15 HIGHLIGHTING =====
     

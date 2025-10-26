@@ -78,6 +78,9 @@ function setupClickToCopy() {
             event.preventDefault();
             event.stopPropagation();
             
+            // Log for debugging
+            console.log('Copying text:', copyText);
+            
             // Copy to remote desktop clipboard
             copyToRemoteClipboard(copyText);
             
