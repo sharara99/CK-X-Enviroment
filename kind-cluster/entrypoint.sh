@@ -97,14 +97,20 @@ EOF
                 echo "$(date '+%Y-%m-%d %H:%M:%S') | Waiting 5 seconds before retry..."
                 sleep 5
             else
-                echo "$(date '+%Y-%m-%d %H:%M:%S') | ❌ All attempts failed, trying simple cluster creation..."
-                k3d cluster create cluster --port "6445:6443@loadbalancer" --kubeconfig-switch-context=false
+                echo "$(date '+%Y-%m-%d %H:%M:%S') | ❌ All attempts failed, trying simple cluster creation with TLS SAN..."
+                k3d cluster create cluster --port "6445:6443@loadbalancer" --kubeconfig-switch-context=false --k3s-arg '--tls-san=k8s-api-server@server:0'
             fi
         fi
     done
     echo "$(date '+%Y-%m-%d %H:%M:%S') | ✅ Pre-configured k3d cluster created successfully"
 else
-    echo "$(date '+%Y-%m-%d %H:%M:%S') | k3d cluster already exists, skipping creation"
+    echo "$(date '+%Y-%m-%d %H:%M:%S') | k3d cluster already exists, verifying configuration..."
+    # Check if cluster has correct TLS SAN, if not, recreate it
+    if ! k3d cluster get cluster 2>&1 | grep -q "k8s-api-server"; then
+        echo "$(date '+%Y-%m-%d %H:%M:%S') | Cluster missing TLS SAN for k8s-api-server, recreating with proper configuration..."
+        k3d cluster delete cluster 2>/dev/null || true
+        k3d cluster create cluster --port "6445:6443@loadbalancer" --kubeconfig-switch-context=false --k3s-arg '--tls-san=k8s-api-server@server:0'
+    fi
 fi
 
 # Copy and fix kubeconfig to shared volume
