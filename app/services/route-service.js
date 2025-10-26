@@ -32,6 +32,7 @@ class RouteService {
             }
         });
 
+        
         // Handle errors
         app.use((err, req, res, next) => {
             console.error('Server error:', err);
