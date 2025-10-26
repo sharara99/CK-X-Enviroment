@@ -14,6 +14,43 @@ function processQuestionContent(content) {
         '<span class="clickable-url" data-copy-text="$1" title="Click to copy URL">$1</span>'
     );
     
+    // ===== NETWORKPOLICY QUESTION 15 HIGHLIGHTING - MUST BE FIRST =====
+    // Highlight forbidden policies first (with strikethrough)
+    processedContent = processedContent.replace(
+        /\b(backend-allow-all|backend-deny-all)\b/g,
+        '<span class="highlighted-forbidden" style="background-color: #f8d7da; padding: 2px 4px; border-radius: 3px; text-decoration: line-through; font-weight: bold;" data-copy-text="$1" title="Do NOT use this policy">$1</span>'
+    );
+    
+    // Highlight required policy name
+    processedContent = processedContent.replace(
+        /(backend-allow-frontend)/g,
+        '<span class="highlighted-value" style="background-color: #fff3cd; padding: 2px 4px; border-radius: 3px; font-weight: bold;" data-copy-text="backend-allow-frontend" title="Click to copy NetworkPolicy name">backend-allow-frontend</span>'
+    );
+    
+    // Highlight pod labels
+    processedContent = processedContent.replace(
+        /(app=backend-api)/g,
+        '<span class="highlighted-value" style="background-color: #fff3cd; padding: 2px 4px; border-radius: 3px; font-weight: bold;" data-copy-text="app=backend-api" title="Click to copy pod label">app=backend-api</span>'
+    );
+    
+    // Highlight namespace labels
+    processedContent = processedContent.replace(
+        /(name=frontend)/g,
+        '<span class="highlighted-value" style="background-color: #fff3cd; padding: 2px 4px; border-radius: 3px; font-weight: bold;" data-copy-text="name=frontend" title="Click to copy namespace label">name=frontend</span>'
+    );
+    
+    // Highlight standalone namespace names
+    processedContent = processedContent.replace(
+        /(\bnamespace:\s*backend\b)/gi,
+        'namespace: <span class="highlighted-value" style="background-color: #d1ecf1; padding: 2px 4px; border-radius: 3px; font-weight: bold;" data-copy-text="backend" title="Click to copy namespace">backend</span>'
+    );
+    
+    processedContent = processedContent.replace(
+        /(\bnamespace:\s*frontend\b)/gi,
+        'namespace: <span class="highlighted-value" style="background-color: #d1ecf1; padding: 2px 4px; border-radius: 3px; font-weight: bold;" data-copy-text="frontend" title="Click to copy namespace">frontend</span>'
+    );
+    // ===== END NETWORKPOLICY QUESTION 15 HIGHLIGHTING =====
+    
     // Add click-to-copy functionality for kubectl commands
     processedContent = processedContent.replace(
         /(kubectl\s+[^\n\r<]+)/g,
@@ -360,32 +397,6 @@ function processQuestionContent(content) {
     processedContent = processedContent.replace(
         /\b(namespace|Namespace)\s+(autoscale)\b/g,
         '$1 <span class="clickable-namespace-autoscale" data-copy-text="$2" title="Click to copy namespace">$2</span>'
-    );
-    
-    // NetworkPolicy specific patterns for Question 15
-    processedContent = processedContent.replace(
-        /\b(backend-allow-frontend)\b/g,
-        '<span class="highlighted-value" style="background-color: #fff3cd; padding: 2px 4px; border-radius: 3px; font-weight: bold;" data-copy-text="$1" title="Click to copy NetworkPolicy name">$1</span>'
-    );
-    
-    processedContent = processedContent.replace(
-        /(app=backend-api)/g,
-        '<span class="highlighted-value" style="background-color: #fff3cd; padding: 2px 4px; border-radius: 3px; font-weight: bold;" data-copy-text="$1" title="Click to copy pod label">$1</span>'
-    );
-    
-    processedContent = processedContent.replace(
-        /(name=frontend)/g,
-        '<span class="highlighted-value" style="background-color: #fff3cd; padding: 2px 4px; border-radius: 3px; font-weight: bold;" data-copy-text="$1" title="Click to copy namespace label">$1</span>'
-    );
-    
-    processedContent = processedContent.replace(
-        /\b(backend-allow-all|backend-deny-all)\b/g,
-        '<span class="highlighted-forbidden" style="background-color: #f8d7da; padding: 2px 4px; border-radius: 3px; text-decoration: line-through;" data-copy-text="$1" title="Do NOT use this policy">$1</span>'
-    );
-    
-    processedContent = processedContent.replace(
-        /\bnamespace:\s+(backend|frontend)\b/gi,
-        'namespace: <span class="highlighted-value" style="background-color: #d1ecf1; padding: 2px 4px; border-radius: 3px; font-weight: bold;" data-copy-text="$1" title="Click to copy namespace">$1</span>'
     );
     
     // Add highlighting to text in single quotes that isn't already styled
