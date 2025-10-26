@@ -36,23 +36,16 @@ function processQuestionContent(content) {
         '<span class="highlight-red" style="background-color: #f8d7da; padding: 2px 4px; border-radius: 3px; text-decoration: line-through; font-weight: bold;" data-copy-text="$1" title="Do NOT use">$1</span>'
     );
     
-    // Highlight standalone "backend" and "frontend" when they appear as values
+    // Highlight standalone "backend" word (not in URLs or already highlighted)
     processedContent = processedContent.replace(
-        /([\s\(])(backend)([\s\)])/g,
-        function(match, before, value, after) {
-            // Only highlight if not already inside a span
-            if (match.includes('<span')) return match;
-            return before + '<span class="highlight-blue" style="background-color: #d1ecf1; padding: 2px 4px; border-radius: 3px; font-weight: bold;" data-copy-text="backend" title="Click to copy">backend</span>' + after;
-        }
+        /\b(backend)\b(?![^<]*>)/g,
+        '<span class="highlight-blue" style="background-color: #d1ecf1; padding: 2px 4px; border-radius: 3px; font-weight: bold;" data-copy-text="backend" title="Click to copy">backend</span>'
     );
     
+    // Highlight standalone "frontend" word (not in URLs or already highlighted)
     processedContent = processedContent.replace(
-        /([\s\(])(frontend)([\s\)])/g,
-        function(match, before, value, after) {
-            // Only highlight if not already inside a span
-            if (match.includes('<span')) return match;
-            return before + '<span class="highlight-blue" style="background-color: #d1ecf1; padding: 2px 4px; border-radius: 3px; font-weight: bold;" data-copy-text="frontend" title="Click to copy">frontend</span>' + after;
-        }
+        /\b(frontend)\b(?![^<]*>)/g,
+        '<span class="highlight-blue" style="background-color: #d1ecf1; padding: 2px 4px; border-radius: 3px; font-weight: bold;" data-copy-text="frontend" title="Click to copy">frontend</span>'
     );
     // ===== END QUESTION 15 HIGHLIGHTING =====
     
