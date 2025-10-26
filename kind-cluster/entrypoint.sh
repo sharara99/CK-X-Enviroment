@@ -107,6 +107,15 @@ else
     echo "$(date '+%Y-%m-%d %H:%M:%S') | k3d cluster already exists, skipping creation"
 fi
 
+# Copy and fix kubeconfig to shared volume
+echo "$(date '+%Y-%m-%d %H:%M:%S') | Copying kubeconfig to shared volume..."
+mkdir -p /home/candidate/.kube
+k3d kubeconfig write cluster --kubeconfig-switch-context=false
+# Update the server address to use k8s-api-server
+sed -i 's|server: https://.*|server: https://k8s-api-server:6445|g' /home/candidate/.kube/config
+cp /home/candidate/.kube/config /home/candidate/.kube/kubeconfig
+echo "$(date '+%Y-%m-%d %H:%M:%S') | ✅ Kubeconfig copied and configured"
+
 # ===============================================================================
 #   Setup CKA Exam Resources
 # ===============================================================================

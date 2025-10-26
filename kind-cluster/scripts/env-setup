@@ -121,14 +121,9 @@ echo "$(date '+%Y-%m-%d %H:%M:%S') | Docker and KIND environment is ready for us
 
 # Save kubeconfig and set API server address
 cp /home/candidate/.kube/config /home/candidate/.kube/kubeconfig
-# Extract the actual port from k3d kubeconfig and use it
-ACTUAL_PORT=$(grep -o 'server: https://127\.0\.0\.1:[0-9]*' /home/candidate/.kube/config | grep -o '[0-9]*$')
-if [ -n "$ACTUAL_PORT" ]; then
-    sed -i "s|server: https://127\.0\.0\.1:$ACTUAL_PORT|server: https://k8s-api-server:$ACTUAL_PORT|" /home/candidate/.kube/kubeconfig
-    echo "$(date '+%Y-%m-%d %H:%M:%S') | ✅ Kubeconfig updated to use k8s-api-server:$ACTUAL_PORT"
-else
-    echo "$(date '+%Y-%m-%d %H:%M:%S') | ⚠️  Could not extract port from kubeconfig, using default"
-fi
+# Update the server address to use k8s-api-server:6445
+sed -i 's|server: https://.*|server: https://k8s-api-server:6445|g' /home/candidate/.kube/kubeconfig
+echo "$(date '+%Y-%m-%d %H:%M:%S') | ✅ Kubeconfig updated to use k8s-api-server:6445"
 
 export KUBECONFIG=/home/candidate/.kube/kubeconfig
 
