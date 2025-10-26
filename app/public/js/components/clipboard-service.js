@@ -60,11 +60,23 @@ function showCopyNotification(content) {
  */
 function setupClickToCopy() {
     document.addEventListener('click', function(event) {
-        const target = event.target;
+        // Find the closest element with data-copy-text (handles nested elements)
+        let target = event.target;
+        let copyText = null;
         
-        // Check if clicked element has data-copy-text attribute
-        if (target && target.hasAttribute('data-copy-text')) {
-            const copyText = target.getAttribute('data-copy-text');
+        // Walk up the DOM tree to find data-copy-text attribute
+        while (target && target !== document) {
+            if (target.hasAttribute && target.hasAttribute('data-copy-text')) {
+                copyText = target.getAttribute('data-copy-text');
+                break;
+            }
+            target = target.parentElement;
+        }
+        
+        // If we found a copyable element, copy it
+        if (copyText) {
+            event.preventDefault();
+            event.stopPropagation();
             
             // Copy to remote desktop clipboard
             copyToRemoteClipboard(copyText);
@@ -87,10 +99,6 @@ function setupClickToCopy() {
                     console.error('Fallback copy failed:', fallbackErr);
                 }
             });
-            
-            // Prevent default behavior
-            event.preventDefault();
-            event.stopPropagation();
         }
     });
 }
