@@ -14,41 +14,6 @@ function processQuestionContent(content) {
         '<span class="clickable-url" data-copy-text="$1" title="Click to copy URL">$1</span>'
     );
     
-    // ===== QUESTION 15 SPECIFIC HIGHLIGHTING - MUST BE FIRST =====
-    // Highlight specific values for NetworkPolicy question
-    processedContent = processedContent.replace(
-        /(backend-allow-frontend)/g,
-        '<span class="highlight-yellow" style="background-color: #fff3cd; padding: 2px 4px; border-radius: 3px; font-weight: bold;" data-copy-text="backend-allow-frontend" title="Click to copy">backend-allow-frontend</span>'
-    );
-    
-    processedContent = processedContent.replace(
-        /(app=backend-api)/g,
-        '<span class="highlight-yellow" style="background-color: #fff3cd; padding: 2px 4px; border-radius: 3px; font-weight: bold;" data-copy-text="app=backend-api" title="Click to copy">app=backend-api</span>'
-    );
-    
-    processedContent = processedContent.replace(
-        /(name=frontend)/g,
-        '<span class="highlight-yellow" style="background-color: #fff3cd; padding: 2px 4px; border-radius: 3px; font-weight: bold;" data-copy-text="name=frontend" title="Click to copy">name=frontend</span>'
-    );
-    
-    processedContent = processedContent.replace(
-        /(backend-allow-all|backend-deny-all)/g,
-        '<span class="highlight-red" style="background-color: #f8d7da; padding: 2px 4px; border-radius: 3px; text-decoration: line-through; font-weight: bold;" data-copy-text="$1" title="Do NOT use">$1</span>'
-    );
-    
-    // Highlight backend - only the word, not when it's part of larger words
-    processedContent = processedContent.replace(
-        /(^|\s|>)(backend)(\s|$|<|,|:)/g,
-        '$1<span class="hl-ns" style="background-color: #d1ecf1; padding: 2px 4px; border-radius: 3px; font-weight: bold;" data-copy-text="backend" title="Click to copy">backend</span>$3'
-    );
-    
-    // Highlight frontend - only the word, not when it's part of larger words
-    processedContent = processedContent.replace(
-        /(^|\s|>)(frontend)(\s|$|<|,|:)/g,
-        '$1<span class="hl-ns" style="background-color: #d1ecf1; padding: 2px 4px; border-radius: 3px; font-weight: bold;" data-copy-text="frontend" title="Click to copy">frontend</span>$3'
-    );
-    // ===== END QUESTION 15 HIGHLIGHTING =====
-    
     // Add click-to-copy functionality for kubectl commands
     processedContent = processedContent.replace(
         /(kubectl\s+[^\n\r<]+)/g,
@@ -59,17 +24,13 @@ function processQuestionContent(content) {
     // Ingress name: value
     processedContent = processedContent.replace(
         /(Ingress name|ingress name):\s*([a-zA-Z0-9-_]+)/g,
-        function(match, label, value) {
-            return label + ': <span class="clickable-ingress" data-copy-text="' + value + '" title="Click to copy ingress name">' + value + '</span>';
-        }
+        '$1: <span class="clickable-ingress" data-copy-text="$2" title="Click to copy ingress name">$2</span>'
     );
     
     // Namespace: value
     processedContent = processedContent.replace(
         /(Namespace|namespace):\s*([a-zA-Z0-9-_]+)/g,
-        function(match, label, value) {
-            return label + ': <span class="clickable-namespace" data-copy-text="' + value + '" title="Click to copy namespace">' + value + '</span>';
-        }
+        '$1: <span class="clickable-namespace" data-copy-text="$2" title="Click to copy namespace">$2</span>'
     );
     
     // Host: value
