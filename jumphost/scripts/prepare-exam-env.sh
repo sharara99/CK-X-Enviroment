@@ -10,9 +10,11 @@ log() {
 # Set defaults
 NUMBER_OF_NODES=${1:-1}
 EXAM_ID=${2:-""}
+CLUSTER_NAME=${3:-cluster}
 
 echo "Exam ID: $EXAM_ID"
 echo "Number of nodes: $NUMBER_OF_NODES"
+echo "Cluster name: $CLUSTER_NAME"
 
 #check docker is running
 if ! docker info > /dev/null 2>&1; then
@@ -63,7 +65,7 @@ sleep 1
 
 #wait till api-server is ready (with timeout) - OPTIMIZED
 API_CHECK_COUNT=0
-while ! kubectl get nodes > /dev/null 2>&1; do
+while ! kubectl get nodes --insecure-skip-tls-verify > /dev/null 2>&1; do
   API_CHECK_COUNT=$((API_CHECK_COUNT+1))
   if [ $API_CHECK_COUNT -gt 15 ]; then
     log "ERROR: API server not ready after 30 seconds"

@@ -123,7 +123,9 @@ echo "$(date '+%Y-%m-%d %H:%M:%S') | Docker and KIND environment is ready for us
 cp /home/candidate/.kube/config /home/candidate/.kube/kubeconfig
 # Update the server address to use k8s-api-server:6445
 sed -i 's|server: https://.*|server: https://k8s-api-server:6445|g' /home/candidate/.kube/kubeconfig
-echo "$(date '+%Y-%m-%d %H:%M:%S') | ✅ Kubeconfig updated to use k8s-api-server:6445"
+# Add insecure-skip-tls-verify for certificate issues
+sed -i '/server: https:\/\/k8s-api-server:6445/a\    insecure-skip-tls-verify: true' /home/candidate/.kube/kubeconfig
+echo "$(date '+%Y-%m-%d %H:%M:%S') | ✅ Kubeconfig updated to use k8s-api-server:6445 with insecure-skip-tls-verify"
 
 export KUBECONFIG=/home/candidate/.kube/kubeconfig
 
