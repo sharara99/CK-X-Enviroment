@@ -51,17 +51,21 @@ and YAML you’ll see in the real deal.
 
 1. Setting Up kubeadm and cri-dockerd
 
-Task: Prepare the system for Kubernetes by installing cri-dockerd and configuring system parameters.
+Task: Prepare the system for Kubernetes by installing cri-dockerd and configuring system parameters. You must set the following sysctl parameters:
+- net.ipv6.conf.all.forwarding=1
+- net.ipv4.ip_forward=1
+- net.netfilter.nf_conntrack_max=131072
+- net.bridge.bridge-nf-call-iptables=1
 
 Steps:
 
 sudo dpkg -i ~/cri-dockerd_0.3.9.3-0.ubuntu-jammy_amd64.deb
 sudo systemctl enable cri-docker
 sudo systemctl start cri-docker
-sudo sysctl -w net.bridge.bridge-nf-call-iptables=1
 sudo sysctl -w net.ipv6.conf.all.forwarding=1
 sudo sysctl -w net.ipv4.ip_forward=1
 sudo sysctl -w net.netfilter.nf_conntrack_max=131072
+sudo sysctl -w net.bridge.bridge-nf-call-iptables=1
 # sysctl params required by setup, params persist across reboots
 cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
 net.ipv4.ip_forward = 1

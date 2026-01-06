@@ -4,7 +4,7 @@
       "id": "1",
       "namespace": "default",
       "machineHostname": "ckad9999",
-      "question": "Setting Up kubeadm and cri-dockerd\n\nTask: Prepare the system for Kubernetes by installing cri-dockerd and configuring system parameters.\n\nSteps:\n1. Install cri-dockerd package\n2. Enable and start cri-docker service\n3. Configure system parameters for Kubernetes\n4. Create persistent sysctl configuration\n5. Apply sysctl parameters without reboot\n\nVerify that cri-docker service is running.",
+      "question": "Setting Up kubeadm and cri-dockerd\n\nTask: Prepare the system for Kubernetes by installing cri-dockerd and configuring system parameters. You must set the following sysctl parameters:\n- net.ipv6.conf.all.forwarding=1\n- net.ipv4.ip_forward=1\n- net.netfilter.nf_conntrack_max=131072\n- net.bridge.bridge-nf-call-iptables=1\n\nSteps:\n1. Download and install cri-dockerd package:\n   Package: cri-dockerd_0.3.9.3-0.ubuntu-jammy_amd64.deb\n   URL: https://github.com/Mirantis/cri-dockerd/releases/download/v0.3.9/cri-dockerd_0.3.9.3-0.ubuntu-jammy_amd64.deb\n2. Enable and start cri-docker service\n3. Configure the required system parameters listed above\n4. Create persistent sysctl configuration in /etc/sysctl.d/k8s.conf\n5. Apply sysctl parameters without reboot\n\nVerify that cri-docker service is running and all sysctl parameters are set correctly.",
       "concepts": ["kubeadm", "cri-dockerd", "system configuration", "sysctl"],
       "verification": [
         {
