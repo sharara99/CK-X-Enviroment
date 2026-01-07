@@ -1,4 +1,8 @@
 # Enable BuildKit for faster builds and parallel processing
+# Note: All services are configured with 'pull: false' to build from local files only.
+# Docker Compose will automatically detect changes in local files and rebuild when needed.
+# To force a rebuild every time, use: docker compose up --build
+# Or rebuild specific services: docker compose build [service-name]
 x-buildkit: &buildkit
   BUILDKIT_INLINE_CACHE: 1
   DOCKER_BUILDKIT: 1
@@ -9,6 +13,7 @@ services:
   remote-desktop:
     build:
       context: ./remote-desktop
+      pull: false
       args:
         BUILDKIT_INLINE_CACHE: 1
     hostname: terminal
@@ -40,6 +45,7 @@ services:
   webapp:
     build:
       context: ./app
+      pull: false
       args:
         BUILDKIT_INLINE_CACHE: 1
     expose:
@@ -72,6 +78,7 @@ services:
   nginx:
     build:
       context: ./nginx
+      pull: false
     depends_on:
       - webapp
       - remote-desktop
@@ -100,6 +107,7 @@ services:
   jumphost:
     build:
       context: ./jumphost
+      pull: false
     hostname: ckad9999
     privileged: true
     # No external port mappings - only accessible internally
@@ -127,6 +135,7 @@ services:
   remote-terminal:
     build:
       context: ./remote-terminal
+      pull: false
     hostname: remote-terminal
     expose:
       - "22" # SSH port (internal only)
@@ -152,6 +161,7 @@ services:
   k8s-api-server: # Service name that will be used for DNS resolution
     build:
       context: ./kind-cluster
+      pull: false
       args:
         BUILDKIT_INLINE_CACHE: 1
     container_name: kind-cluster
@@ -221,6 +231,7 @@ services:
     build:
       context: ./facilitator
       dockerfile: Dockerfile
+      pull: false
       args:
         BUILDKIT_INLINE_CACHE: 1
     hostname: facilitator
